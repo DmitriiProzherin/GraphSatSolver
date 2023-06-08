@@ -12,7 +12,6 @@ import java.util.Objects;
 public class GraphApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        stage.getIcons().add(new Image("C:\\Users\\Behemoth\\IdeaProjects\\GraphSatSolver\\src\\main\\resources\\com\\sat\\graphsatsolver\\icons\\app.png"));
         FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("graph-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("SAT");

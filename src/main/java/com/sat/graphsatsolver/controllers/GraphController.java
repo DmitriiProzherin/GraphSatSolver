@@ -1,12 +1,15 @@
 package com.sat.graphsatsolver.controllers;
 
+import com.sat.graphsatsolver.GraphApplication;
 import com.sat.graphsatsolver.gui.*;
 import com.sat.graphsatsolver.solvers.DPLL;
 import com.sat.graphsatsolver.solvers.Solver;
 import com.sat.graphsatsolver.utils.*;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -65,11 +68,6 @@ public class GraphController implements Initializable {
     public TextArea satSolverOutTextArea;
 
     @FXML
-    protected void systemExit() {
-        System.exit(1);
-    }
-
-    @FXML
     protected void loadFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Загрузить");
@@ -78,71 +76,65 @@ public class GraphController implements Initializable {
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-
             try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+                StringBuilder lines = new StringBuilder();
 
-                this.graph = new Graph();
-                this.drawingPane.getChildren().clear();
-
-                String textLine;
-
-                int k = Integer.parseInt(br.readLine());
-                int[][] matrix = new int[k][k];
-
-                parse(br, k, matrix);
-
-                int m = Integer.parseInt(br.readLine());
-                int[][] hiddenMatrix = new int[m][m];
-
-                parse(br, m, hiddenMatrix);
-
-
-                this.graph.setSize(k);
-                this.graph.setAdjacencyMatrix(matrix);
-                this.graph.setCapacity(m);
-                this.graph.setHiddenAdjacencyMatrix(hiddenMatrix);
-
-                double x;
-                double y;
-                int name;
-                String[] arr;
-
-                nodeCounter = 0;
-                for (int i = 1; i <= k; i++) {
-                    textLine = br.readLine();
-                    arr = textLine.trim().split(" ");
-                    name = Integer.parseInt(arr[0]);
-                    x = Double.parseDouble(arr[1]);
-                    y = Double.parseDouble(arr[2]);
-
-                    nodeCounter++;
-                    GraphNode node = new GraphNode(x, y, name);
-                    this.graph.getNodes().add(node);
-                    drawingPane.getChildren().add(node);
+                while (br.ready()) {
+                    lines.append(br.readLine()).append("\n");
                 }
 
-                for (int i = 0; i < k; i++) {
-                    for (int j = i; j < k; j++) {
-                        if (this.graph.getMatrix()[i][j] == 1) {
-                            Drawer.lineFromNodeToNode(this.graph.getNodes().get(i), this.graph.getNodes().get(j), this.drawingPane);
-                        }
-                    }
-                }
+                System.out.println(lines.toString());
+
+//                this.graph = new Graph();
+//                this.drawingPane.getChildren().clear();
+//
+//                String textLine;
+//
+//                int k = Integer.parseInt(br.readLine());
+//                int[][] matrix = new int[k][k];
+//
+//                parse(br, k, matrix);
+//
+//                int m = Integer.parseInt(br.readLine());
+//                int[][] hiddenMatrix = new int[m][m];
+//
+//                parse(br, m, hiddenMatrix);
+//
+//
+//                this.graph.setSize(k);
+//                this.graph.setAdjacencyMatrix(matrix);
+//                this.graph.setCapacity(m);
+//                this.graph.setHiddenAdjacencyMatrix(hiddenMatrix);
+//
+//                double x;
+//                double y;
+//                int name;
+//                String[] arr;
+//
+//                nodeCounter = 0;
+//                for (int i = 1; i <= k; i++) {
+//                    textLine = br.readLine();
+//                    arr = textLine.trim().split(" ");
+//                    name = Integer.parseInt(arr[0]);
+//                    x = Double.parseDouble(arr[1]);
+//                    y = Double.parseDouble(arr[2]);
+//
+//                    nodeCounter++;
+//                    GraphNode node = new GraphNode(x, y, name);
+//                    this.graph.getNodes().add(node);
+//                    drawingPane.getChildren().add(node);
+//                }
+//
+//                for (int i = 0; i < k; i++) {
+//                    for (int j = i; j < k; j++) {
+//                        if (this.graph.getMatrix()[i][j] == 1) {
+//                            Drawer.lineFromNodeToNode(this.graph.getNodes().get(i), this.graph.getNodes().get(j), this.drawingPane);
+//                        }
+//                    }
+//                }
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-        }
-    }
-
-    private void parse(BufferedReader br, int m, int[][] hiddenMatrix) throws IOException {
-        String textLine;
-        String[] values;
-        for (int i = 0; i < m; i++) {
-            textLine = br.readLine();
-            values = textLine.split(" ");
-            for (int j = 0; j < m; j++) {
-                hiddenMatrix[i][j] = Integer.parseInt(values[j]);
             }
         }
     }
@@ -189,6 +181,26 @@ public class GraphController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    @FXML
+    protected void openSatWindow(){
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("sat-view.fxml"));
+            Scene scene = new Scene(fxmlLoader.load());
+            Stage stage = new Stage();
+            stage.setTitle("SAT для КНФ в формате DIMACS");
+            stage.setScene(scene);
+            stage.show();
+        } catch (IOException e) {
+            System.Logger logger = System.getLogger(getClass().getName());
+            logger.log(System.Logger.Level.ERROR, "Ошибка при создании нового окна для решателя SAT", e);
+        }
+    }
+
+    @FXML
+    protected void systemExit() {
+        System.exit(1);
     }
 
     @FXML
@@ -303,7 +315,7 @@ public class GraphController implements Initializable {
     @FXML
     protected void solveSat() {
         String text = cnfTextArea.getText();
-        var satInput = Loader.fromStringAsList(text);
+        var satInput = StringToList.fromStringAsList(text);
 
         Solver dpll = new DPLL();
 
@@ -352,6 +364,18 @@ public class GraphController implements Initializable {
         }
 
         return map;
+    }
+
+    private void parse(BufferedReader br, int m, int[][] hiddenMatrix) throws IOException {
+        String textLine;
+        String[] values;
+        for (int i = 0; i < m; i++) {
+            textLine = br.readLine();
+            values = textLine.split(" ");
+            for (int j = 0; j < m; j++) {
+                hiddenMatrix[i][j] = Integer.parseInt(values[j]);
+            }
+        }
     }
 
 

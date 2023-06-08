@@ -1,7 +1,7 @@
 package com.sat.graphsatsolver.solvers;
 
 import com.sat.graphsatsolver.structures.Function;
-import com.sat.graphsatsolver.utils.Loader;
+import com.sat.graphsatsolver.utils.StringToList;
 
 import java.util.ArrayList;
 
@@ -19,7 +19,7 @@ public abstract class Solver {
     }
 
     public void init(String inputString){
-        this.function = new Function(Loader.fromStringAsList(inputString));
+        this.function = new Function(StringToList.fromStringAsList(inputString));
     }
     public abstract boolean solve();
     public abstract String result();
