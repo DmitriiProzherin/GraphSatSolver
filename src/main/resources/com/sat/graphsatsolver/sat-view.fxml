@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
+   <children>
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="433.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Файл">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Close" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Режим">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Delete" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Помощь">
+            <items>
+              <MenuItem mnemonicParsing="false" text="About" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Выполнить" />
+        </menus>
+      </MenuBar>
+      <HBox layoutY="27.0" prefHeight="675.0" prefWidth="433.0" style="-fx-padding: 10;">
+         <children>
+            <TextField focusTraversable="false" prefHeight="674.0" prefWidth="335.0" />
+            <Separator focusTraversable="false" prefHeight="675.0" prefWidth="30.0" visible="false" />
+            <TextField focusTraversable="false" prefHeight="685.0" prefWidth="124.0" />
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>
