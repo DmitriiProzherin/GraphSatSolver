@@ -5,15 +5,11 @@ import com.sat.graphsatsolver.solvers.DPLL;
 import com.sat.graphsatsolver.solvers.Solver;
 import com.sat.graphsatsolver.utils.*;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
@@ -31,8 +27,8 @@ import java.util.stream.Collectors;
 
 public class GraphController implements Initializable {
 
-    private List<GraphNode> selectedNodeList = new LinkedList<>();
-    private List<GraphNode> nodeList = new LinkedList<>();
+    private final List<GraphNode> selectedNodeList = new LinkedList<>();
+    private final List<GraphNode> nodeList = new LinkedList<>();
     private Graph graph = new Graph();
     private List<Object> objectsOnPane = new LinkedList<>();
     private int colorsAmount;
@@ -93,26 +89,12 @@ public class GraphController implements Initializable {
                 int k = Integer.parseInt(br.readLine());
                 int[][] matrix = new int[k][k];
 
-                String[] values;
-                for (int i = 0; i < k; i++) {
-                    textLine = br.readLine();
-                    values = textLine.split(" ");
-                    for (int j = 0; j < k; j++) {
-                        matrix[i][j] = Integer.parseInt(values[j]);
-                    }
-                }
-
+                parse(br, k, matrix);
 
                 int m = Integer.parseInt(br.readLine());
                 int[][] hiddenMatrix = new int[m][m];
 
-                for (int i = 0; i < m; i++) {
-                    textLine = br.readLine();
-                    values = textLine.split(" ");
-                    for (int j = 0; j < m; j++) {
-                        hiddenMatrix[i][j] = Integer.parseInt(values[j]);
-                    }
-                }
+                parse(br, m, hiddenMatrix);
 
 
                 this.graph.setSize(k);
@@ -149,6 +131,18 @@ public class GraphController implements Initializable {
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void parse(BufferedReader br, int m, int[][] hiddenMatrix) throws IOException {
+        String textLine;
+        String[] values;
+        for (int i = 0; i < m; i++) {
+            textLine = br.readLine();
+            values = textLine.split(" ");
+            for (int j = 0; j < m; j++) {
+                hiddenMatrix[i][j] = Integer.parseInt(values[j]);
             }
         }
     }
@@ -291,12 +285,19 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void generateCnf() {
-        nodeCreationButton.setSelected(false);
-        edgeCreationButton.setSelected(false);
+        if ("Раскраска графа".equalsIgnoreCase(problemChoiceBox.getValue())) {
 
-        colorsAmount = Integer.parseInt(this.colorsAmountTextField.getText());
+            nodeCreationButton.setSelected(false);
+            edgeCreationButton.setSelected(false);
 
-        cnfTextArea.setText(DIMACSConverter.graphColoring(graph.getMatrix(), colorsAmount));
+            colorsAmount = Integer.parseInt(this.colorsAmountTextField.getText());
+
+            cnfTextArea.setText(DIMACSConverter.graphColoring(graph.getMatrix(), colorsAmount));
+        } else if ("Гамильтонов путь".equalsIgnoreCase(problemChoiceBox.getValue())) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setContentText("Задача о поиске гамильтонова пути в графе находится в разработке.");
+            alert.show();
+        }
     }
 
     @FXML
@@ -390,7 +391,7 @@ public class GraphController implements Initializable {
 
         this.colorsAmountTextField.textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
-                colorsAmountTextField.setText(newValue.replaceAll("[^\\d]", ""));
+                colorsAmountTextField.setText(newValue.replaceAll("\\D", ""));
             }
         });
     }

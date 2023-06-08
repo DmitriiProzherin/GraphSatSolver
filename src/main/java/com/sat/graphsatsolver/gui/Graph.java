@@ -63,10 +63,6 @@ public class Graph {
         this.size = size;
     }
 
-    public void setNodes(ArrayList<GraphNode> nodes) {
-        this.nodes = nodes;
-    }
-
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }

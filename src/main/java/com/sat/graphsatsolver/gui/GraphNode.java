@@ -1,7 +1,6 @@
 package com.sat.graphsatsolver.gui;
 
 import javafx.scene.control.Label;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -11,20 +10,17 @@ public class GraphNode extends StackPane {
     private final Circle circle;
     private final Label label;
 
-    private final String LABEL_STYLE = "" +
-            "-fx-font-weight: bold;" +
+    private final String LABEL_STYLE = "-fx-font-weight: bold;" +
             "-fx-text-fill: white;" +
             "-fx-font-size: 20;";
 
-    private final String CIRCLE_STYLE = "" +
-            "-fx-fill: grey;" +
+    private final String CIRCLE_STYLE = "-fx-fill: grey;" +
             "-fx-stroke: wheat;" +
             "-fx-stroke-width: 2";
 
     private final double OPACITY_SELECTED = 1;
     private final double OPACITY_UNSELECTED = 0.7;
     private final double RADIUS = 30;
-    private boolean draggable;
     private boolean selected;
     private int designation;
     private double centerX;
@@ -98,25 +94,10 @@ public class GraphNode extends StackPane {
 
 
 
-    public void setDraggable(boolean draggable) {
-        this.draggable = draggable;
-
-        if (draggable) {
-            //this.setOn
-        }
-
-    }
     public void resetStyle(){
         this.circle.setFill(Color.GREY);
     }
 
-    public void makeGrey(){
-        this.circle.setFill(Color.GREY);
-    }
-
-    public boolean isDraggable(){
-        return this.draggable;
-    }
 
     public int getDesignation() {
         return designation;
