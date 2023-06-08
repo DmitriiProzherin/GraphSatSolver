@@ -273,27 +273,28 @@ public class GraphController implements Initializable {
     }
 
     @FXML
-    protected void colorsToDefault(){
-
+    protected void colorsToDefault() {
+        this.graph.getNodes().forEach(GraphNode::resetStyle);
     }
+
     @FXML
-    protected void decrementColorsAmount(){
+    protected void decrementColorsAmount() {
         int value = Integer.parseInt(this.colorsAmountTextField.getText());
         if (value > 1) this.colorsAmountTextField.setText(String.valueOf(--value));
     }
 
     @FXML
-    protected void incrementColorsAmount(){
+    protected void incrementColorsAmount() {
         int value = Integer.parseInt(this.colorsAmountTextField.getText());
         this.colorsAmountTextField.setText(String.valueOf(++value));
     }
+
     @FXML
     protected void generateCnf() {
         nodeCreationButton.setSelected(false);
         edgeCreationButton.setSelected(false);
 
         colorsAmount = Integer.parseInt(this.colorsAmountTextField.getText());
-        this.colorMap = createColorMap(colorsAmount);
 
         cnfTextArea.setText(DIMACSConverter.graphColoring(graph.getMatrix(), colorsAmount));
     }
@@ -313,6 +314,8 @@ public class GraphController implements Initializable {
 
 
         if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
+            this.colorMap = createColorMap(colorsAmount);
+
             List<Integer> out = Arrays.stream(result.split(" "))
                     .map(Integer::parseInt)
                     .toList();

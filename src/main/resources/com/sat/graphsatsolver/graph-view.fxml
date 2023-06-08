@@ -37,28 +37,29 @@
                <children>
                   <VBox prefHeight="573.0" prefWidth="153.0">
                      <children>
-                        <Button focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="173.0" text="Создать/Редактировать" />
-                        <Separator prefWidth="200.0" />
                         <ToggleButton fx:id="nodeCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Вершина" />
+                        <Separator prefWidth="200.0" />
                         <ToggleButton fx:id="edgeCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Ребро" />
                         <Separator prefWidth="200.0" />
                         <Button fx:id="cancelButton" focusTraversable="false" mnemonicParsing="false" onAction="#drawingPaneRemoveLastNode" prefHeight="50.0" prefWidth="165.0" text="Отмена" />
                         <Separator prefWidth="200.0" />
                         <Button fx:id="clearDrawingPaneButton" focusTraversable="false" mnemonicParsing="false" onAction="#clearDrawingPane" prefHeight="50.0" prefWidth="165.0" text="Очистить" />
                         <Separator prefWidth="200.0" />
+                        <Button fx:id="colorsToDefaultButton" focusTraversable="false" mnemonicParsing="false" onAction="#colorsToDefault" prefHeight="50.0" prefWidth="175.0" text="Сброс раскраски" />
+                        <Separator focusTraversable="false" orientation="VERTICAL" prefHeight="60.0" prefWidth="152.0" visible="false" />
                         <Label alignment="CENTER" focusTraversable="false" prefHeight="17.0" prefWidth="175.0" style="-fx-font-weight: bold;" text="Тип задачи" textAlignment="CENTER">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <ChoiceBox fx:id="problemChoiceBox" prefHeight="8.0" prefWidth="152.0" />
+                        <ChoiceBox fx:id="problemChoiceBox" focusTraversable="false" prefHeight="8.0" prefWidth="152.0" />
                         <Separator prefWidth="200.0" />
                         <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="161.0" text="Количество цветов" textAlignment="CENTER" />
                         <HBox prefHeight="16.0" prefWidth="152.0">
                            <children>
-                              <Button fx:id="decrementColorsAmountButton" mnemonicParsing="false" onAction="#decrementColorsAmount" prefHeight="25.0" prefWidth="120.0" text="-1" />
-                              <TextField fx:id="colorsAmountTextField" alignment="CENTER" prefHeight="25.0" prefWidth="120.0" text="1" />
-                              <Button fx:id="incrementColorsAmountButton" mnemonicParsing="false" onAction="#incrementColorsAmount" prefHeight="25.0" prefWidth="120.0" text="+1" />
+                              <Button fx:id="decrementColorsAmountButton" focusTraversable="false" mnemonicParsing="false" onAction="#decrementColorsAmount" prefHeight="25.0" prefWidth="120.0" text="-1" />
+                              <TextField fx:id="colorsAmountTextField" alignment="CENTER" focusTraversable="false" prefHeight="25.0" prefWidth="120.0" text="1" />
+                              <Button fx:id="incrementColorsAmountButton" focusTraversable="false" mnemonicParsing="false" onAction="#incrementColorsAmount" prefHeight="25.0" prefWidth="120.0" text="+1" />
                            </children>
                         </HBox>
                      </children>
@@ -83,6 +84,5 @@
             </VBox>
          </children>
       </HBox>
-      <HBox prefHeight="100.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

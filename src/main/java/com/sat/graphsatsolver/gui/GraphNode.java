@@ -106,6 +106,9 @@ public class GraphNode extends StackPane {
         }
 
     }
+    public void resetStyle(){
+        this.circle.setFill(Color.GREY);
+    }
 
     public void makeGrey(){
         this.circle.setFill(Color.GREY);
