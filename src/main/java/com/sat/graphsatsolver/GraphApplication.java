@@ -3,6 +3,7 @@ package com.sat.graphsatsolver;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
@@ -14,7 +15,7 @@ public class GraphApplication extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("graph-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setTitle("SAT");
+        stage.setTitle("Graph");
         stage.setResizable(false);
         stage.setScene(scene);
         stage.show();

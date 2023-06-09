@@ -3,14 +3,15 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
+<AnchorPane fx:id="mainAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
    <children>
-      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="458.0">
+      <MenuBar prefHeight="27.0" prefWidth="458.0">
         <menus>
           <Menu mnemonicParsing="false" text="Файл">
             <items>
@@ -31,12 +32,13 @@
           </Menu>
         </menus>
       </MenuBar>
-      <HBox layoutY="27.0" prefHeight="675.0" prefWidth="458.0" style="-fx-padding: 10;">
+      <HBox layoutY="29.0" prefHeight="673.0" prefWidth="458.0" style="-fx-padding: 10;">
          <children>
-            <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="655.0" prefWidth="343.0" />
+            <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="657.0" prefWidth="336.0" />
             <Separator focusTraversable="false" prefHeight="655.0" prefWidth="10.0" visible="false" />
             <TextArea fx:id="satOutputTextArea" focusTraversable="false" prefHeight="655.0" prefWidth="100.0" />
          </children>
       </HBox>
+      <ProgressBar fx:id="satProgressBar" focusTraversable="false" layoutX="11.0" layoutY="30.0" prefHeight="8.0" prefWidth="435.0" progress="0.0" />
    </children>
 </AnchorPane>

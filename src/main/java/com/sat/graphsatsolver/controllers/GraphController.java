@@ -411,5 +411,6 @@ public class GraphController implements Initializable {
                 colorsAmountTextField.setText(newValue.replaceAll("\\D", ""));
             }
         });
+
     }
 }

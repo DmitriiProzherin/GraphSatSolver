@@ -6,20 +6,21 @@ import com.sat.graphsatsolver.solvers.DPLL;
 import com.sat.graphsatsolver.utils.Drawer;
 import com.sat.graphsatsolver.utils.StringToList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.stream.Collectors;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class SatController {
 
+public class SatController implements Initializable {
+
+    @FXML
+    public AnchorPane mainAnchorpane;
     @FXML
     public MenuItem systemExitMenuItem;
     @FXML
@@ -28,6 +29,8 @@ public class SatController {
     public TextArea cnfTextArea;
     @FXML
     public TextArea satOutputTextArea;
+    @FXML
+    public ProgressBar satProgressBar;
 
     @FXML
     protected void systemExit() {
@@ -37,9 +40,14 @@ public class SatController {
     @FXML
     protected void satRun() {
         satOutputTextArea.clear();
+        satOutputTextArea.setEditable(false);
+        cnfTextArea.setEditable(false);
+
         var satInput = StringToList.fromStringAsList(cnfTextArea.getText());
 
         Runnable solve = () -> {
+            satProgressBar.setVisible(true);
+
             DPLL dpll = new DPLL();
             dpll.init(satInput);
 
@@ -49,7 +57,12 @@ public class SatController {
 
             long time = (endTime - startTime) / 1_000_000_000;
             String result = dpll.result();
-            satOutputTextArea.setText("TIME: " + (double) time + "s\n" + String.join("\n", result.split(" ")));
+            satOutputTextArea.setText("TIME: " + time + "s\n" + String.join("\n", result.split(" ")));
+
+            satOutputTextArea.setEditable(true);
+            cnfTextArea.setEditable(true);
+
+            satProgressBar.setVisible(false);
         };
         Thread thread = new Thread(solve);
         thread.start();
@@ -99,4 +112,9 @@ public class SatController {
         }
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        satProgressBar.setProgress(-1);
+        satProgressBar.setVisible(false);
+    }
 }
