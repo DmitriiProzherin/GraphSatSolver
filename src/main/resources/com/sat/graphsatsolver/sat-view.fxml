@@ -4,38 +4,38 @@
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.Separator?>
-<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="433.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="458.0" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
    <children>
-      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="433.0">
+      <MenuBar layoutY="2.0" prefHeight="25.0" prefWidth="458.0">
         <menus>
           <Menu mnemonicParsing="false" text="Файл">
             <items>
-              <MenuItem mnemonicParsing="false" text="Close" />
+                  <MenuItem mnemonicParsing="false" onAction="#loadCnf" text="Открыть" />
+              <MenuItem mnemonicParsing="false" onAction="#saveCnf" text="Сохранить" />
+                  <MenuItem fx:id="systemExitMenuItem" mnemonicParsing="false" onAction="#systemExit" text="Выход" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Режим">
+          <Menu mnemonicParsing="false" text="Выполнить">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
+              <MenuItem fx:id="satRunMenuItem" mnemonicParsing="false" onAction="#satRun" text="DPLL" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Помощь">
             <items>
-              <MenuItem mnemonicParsing="false" text="About" />
+              <MenuItem mnemonicParsing="false" text="Справка" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Выполнить" />
         </menus>
       </MenuBar>
-      <HBox layoutY="27.0" prefHeight="675.0" prefWidth="433.0" style="-fx-padding: 10;">
+      <HBox layoutY="27.0" prefHeight="675.0" prefWidth="458.0" style="-fx-padding: 10;">
          <children>
-            <TextField focusTraversable="false" prefHeight="674.0" prefWidth="335.0" />
-            <Separator focusTraversable="false" prefHeight="675.0" prefWidth="30.0" visible="false" />
-            <TextField focusTraversable="false" prefHeight="685.0" prefWidth="124.0" />
+            <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="655.0" prefWidth="343.0" />
+            <Separator focusTraversable="false" prefHeight="655.0" prefWidth="10.0" visible="false" />
+            <TextArea fx:id="satOutputTextArea" focusTraversable="false" prefHeight="655.0" prefWidth="100.0" />
          </children>
       </HBox>
    </children>

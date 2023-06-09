@@ -183,6 +183,7 @@ public class GraphController implements Initializable {
             Stage stage = new Stage();
             stage.setTitle("SAT для КНФ в формате DIMACS");
             stage.setScene(scene);
+            stage.setResizable(false);
             stage.show();
         } catch (IOException e) {
             System.Logger logger = System.getLogger(getClass().getName());
