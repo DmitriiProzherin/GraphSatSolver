@@ -1,6 +1,7 @@
 package com.sat.graphsatsolver.controllers;
 
 import com.sat.graphsatsolver.GraphApplication;
+import com.sat.graphsatsolver.SatApplication;
 import com.sat.graphsatsolver.gui.*;
 import com.sat.graphsatsolver.solvers.DPLL;
 import com.sat.graphsatsolver.solvers.Solver;
@@ -177,17 +178,11 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void openSatWindow(){
+        var app = new SatApplication();
         try {
-            FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("sat-view.fxml"));
-            Scene scene = new Scene(fxmlLoader.load());
-            Stage stage = new Stage();
-            stage.setTitle("SAT для КНФ в формате DIMACS");
-            stage.setScene(scene);
-            stage.setResizable(false);
-            stage.show();
+            app.start(new Stage());
         } catch (IOException e) {
-            System.Logger logger = System.getLogger(getClass().getName());
-            logger.log(System.Logger.Level.ERROR, "Ошибка при создании нового окна для решателя SAT", e);
+            throw new RuntimeException(e);
         }
     }
 
