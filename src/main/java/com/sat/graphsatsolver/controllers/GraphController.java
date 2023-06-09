@@ -77,61 +77,53 @@ public class GraphController implements Initializable {
 
         if (file != null) {
             try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
-                StringBuilder lines = new StringBuilder();
 
-                while (br.ready()) {
-                    lines.append(br.readLine()).append("\n");
+                this.graph = new Graph();
+                this.drawingPane.getChildren().clear();
+
+                String textLine;
+
+                int k = Integer.parseInt(br.readLine());
+                int[][] matrix = new int[k][k];
+
+                parse(br, k, matrix);
+
+                int m = Integer.parseInt(br.readLine());
+                int[][] hiddenMatrix = new int[m][m];
+
+                parse(br, m, hiddenMatrix);
+
+                this.graph.setSize(k);
+                this.graph.setAdjacencyMatrix(matrix);
+                this.graph.setCapacity(m);
+                this.graph.setHiddenAdjacencyMatrix(hiddenMatrix);
+
+                double x;
+                double y;
+                int name;
+                String[] arr;
+
+                nodeCounter = 0;
+                for (int i = 1; i <= k; i++) {
+                    textLine = br.readLine();
+                    arr = textLine.trim().split(" ");
+                    name = Integer.parseInt(arr[0]);
+                    x = Double.parseDouble(arr[1]);
+                    y = Double.parseDouble(arr[2]);
+
+                    nodeCounter++;
+                    GraphNode node = new GraphNode(x, y, name);
+                    this.graph.getNodes().add(node);
+                    drawingPane.getChildren().add(node);
                 }
 
-                System.out.println(lines.toString());
-
-//                this.graph = new Graph();
-//                this.drawingPane.getChildren().clear();
-//
-//                String textLine;
-//
-//                int k = Integer.parseInt(br.readLine());
-//                int[][] matrix = new int[k][k];
-//
-//                parse(br, k, matrix);
-//
-//                int m = Integer.parseInt(br.readLine());
-//                int[][] hiddenMatrix = new int[m][m];
-//
-//                parse(br, m, hiddenMatrix);
-//
-//
-//                this.graph.setSize(k);
-//                this.graph.setAdjacencyMatrix(matrix);
-//                this.graph.setCapacity(m);
-//                this.graph.setHiddenAdjacencyMatrix(hiddenMatrix);
-//
-//                double x;
-//                double y;
-//                int name;
-//                String[] arr;
-//
-//                nodeCounter = 0;
-//                for (int i = 1; i <= k; i++) {
-//                    textLine = br.readLine();
-//                    arr = textLine.trim().split(" ");
-//                    name = Integer.parseInt(arr[0]);
-//                    x = Double.parseDouble(arr[1]);
-//                    y = Double.parseDouble(arr[2]);
-//
-//                    nodeCounter++;
-//                    GraphNode node = new GraphNode(x, y, name);
-//                    this.graph.getNodes().add(node);
-//                    drawingPane.getChildren().add(node);
-//                }
-//
-//                for (int i = 0; i < k; i++) {
-//                    for (int j = i; j < k; j++) {
-//                        if (this.graph.getMatrix()[i][j] == 1) {
-//                            Drawer.lineFromNodeToNode(this.graph.getNodes().get(i), this.graph.getNodes().get(j), this.drawingPane);
-//                        }
-//                    }
-//                }
+                for (int i = 0; i < k; i++) {
+                    for (int j = i; j < k; j++) {
+                        if (this.graph.getMatrix()[i][j] == 1) {
+                            Drawer.lineFromNodeToNode(this.graph.getNodes().get(i), this.graph.getNodes().get(j), this.drawingPane);
+                        }
+                    }
+                }
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -153,7 +145,7 @@ public class GraphController implements Initializable {
                 BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
                 writer.write(this.graph.getSize() + "\n");
 
-                int[][] matrix = this.graph.getAdjacencyMatrix();
+                int[][] matrix = this.graph.getMatrix();
 
                 for (var r : matrix) {
                     writer.write(Arrays.stream(r)
