@@ -9,7 +9,7 @@ public class Drawer {
     public static Line lineFromNodeToNode(GraphNode n1, GraphNode n2, Pane pane){
         Line line = new Line();
 
-        line.setStroke(Color.GREY);
+        line.setStroke(Color.rgb(30, 30, 30));
         line.setStrokeWidth(3);
 
         line.setStartX(n1.getCenterX());

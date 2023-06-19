@@ -4,6 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
+
+import java.util.ArrayList;
 
 public class GraphNode extends StackPane {
 
@@ -25,9 +28,15 @@ public class GraphNode extends StackPane {
     private int designation;
     private double centerX;
     private double centerY;
+    private double mouseAnchorX;
+    private double mouseAnchorY;
+    private ArrayList<Line> startEdgeList;
+    private ArrayList<Line> endEdgeList;
 
-    public GraphNode(double x, double y, int designation){
+    public GraphNode(double x, double y, int designation) {
         this.designation = designation;
+        this.startEdgeList = new ArrayList<>();
+        this.endEdgeList = new ArrayList<>();
 
         circle = new Circle();
         label = new Label();
@@ -48,12 +57,11 @@ public class GraphNode extends StackPane {
         this.setCenterY(y);
     }
 
-    public boolean toggleSelection(){
+    public boolean toggleSelection() {
         selected = !selected;
         if (selected) {
             this.select();
-        }
-        else {
+        } else {
             this.unselect();
         }
         return selected;
@@ -63,41 +71,100 @@ public class GraphNode extends StackPane {
         return selected;
     }
 
-    public void select(){
+    public void select() {
         this.selected = true;
         this.circle.setOpacity(OPACITY_SELECTED);
         this.label.setOpacity(OPACITY_SELECTED);
         this.circle.setStroke(Color.RED);
     }
 
-    public void unselect(){
+    public void unselect() {
         this.selected = false;
         this.circle.setOpacity(OPACITY_UNSELECTED);
         this.label.setOpacity(OPACITY_UNSELECTED);
         this.circle.setStroke(Color.WHEAT);
     }
 
-    public void setCenterX(double x){
+    public void setCenterX(double x) {
         this.centerX = x;
     }
 
     public void setCenterY(double y) {
         this.centerY = y;
     }
-    public double getCenterX(){
+
+    public double getCenterX() {
         return this.centerX;
     }
 
-    public double getCenterY(){
+
+    public void setStartEdge(Line edge) {
+        this.startEdgeList.add(edge);
+    }
+
+    public void setEndEdgeList(Line edge) {
+        this.endEdgeList.add(edge);
+    }
+
+    public double getCenterY() {
         return this.centerY;
     }
 
 
-
-    public void resetStyle(){
+    public void resetStyle() {
         this.circle.setFill(Color.GREY);
     }
 
+    public void makeDraggable(boolean selected) {
+
+        if (selected) {
+            this.setOnMousePressed(event -> {
+                mouseAnchorX = event.getX();
+                mouseAnchorY = event.getY();
+            });
+
+            this.setOnMouseDragged(event -> {
+
+                double x = event.getSceneX() - 183 - mouseAnchorX;
+                double y = event.getSceneY() - 47 - mouseAnchorY;
+
+                double posX;
+                double posY;
+
+                if (x < 1) posX = 1;
+                else if (x > 444) posX = 444;
+                else posX = x;
+
+                if (y < 1) posY = 1;
+                else if (y > 572) posY = 572;
+                else posY = y;
+
+                this.setLayoutX(posX);
+                this.setLayoutY(posY);
+
+                if (this.endEdgeList != null) {
+                    this.endEdgeList.forEach(e -> {
+                        e.setEndX(posX + RADIUS);
+                        e.setEndY(posY + RADIUS);
+                    });
+                }
+                if (this.startEdgeList != null) {
+                    this.startEdgeList.forEach(e -> {
+                        e.setStartX(posX + RADIUS);
+                        e.setStartY(posY + RADIUS);
+                    });
+                }
+            });
+
+            this.setOnMouseReleased(e -> {
+                this.setCenterX(this.getLayoutX() + RADIUS);
+                this.setCenterY(this.getLayoutY() + RADIUS);
+            });
+        } else {
+            this.setOnMousePressed(null);
+            this.setOnMouseDragged(null);
+        }
+    }
 
     public int getDesignation() {
         return designation;
@@ -107,7 +174,7 @@ public class GraphNode extends StackPane {
         this.designation = designation;
     }
 
-    public void setFill(Color color){
+    public void setFill(Color color) {
         this.circle.setFill(color);
     }
 

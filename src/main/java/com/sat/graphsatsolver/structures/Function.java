@@ -74,18 +74,13 @@ public final class Function implements Iterable<Clause> {
     }
 
     public Function unitPropagation() {
-
         var unitLiteralsSet = this.removeUnitClauses();
-
         for (var literal : unitLiteralsSet) {
             this.variableSet.put(literal.getVariable(), literal.getSign());
-
             var functionIterator = this.iterator();
-
             while (functionIterator.hasNext()) {
                 var nextClause = functionIterator.next();
                 var clauseIterator = nextClause.iterator();
-
                 while (clauseIterator.hasNext()) {
                     var nextLiteral = clauseIterator.next();
                     if (nextLiteral.equals(literal)) {
@@ -95,13 +90,11 @@ public final class Function implements Iterable<Clause> {
                     if (nextLiteral.equals(literal.reverse())) clauseIterator.remove();
                 }
             }
-
         }
-
         for (var c : this) if (c.size() == 1) this.unitPropagation();
-
         return this;
     }
+
 
 
     private class FunctionIterator implements Iterator<Clause> {

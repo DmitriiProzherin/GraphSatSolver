@@ -1,6 +1,5 @@
 package com.sat.graphsatsolver.controllers;
 
-import com.sat.graphsatsolver.GraphApplication;
 import com.sat.graphsatsolver.SatApplication;
 import com.sat.graphsatsolver.gui.*;
 import com.sat.graphsatsolver.solvers.DPLL;
@@ -8,9 +7,7 @@ import com.sat.graphsatsolver.solvers.Solver;
 import com.sat.graphsatsolver.utils.*;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -177,7 +174,7 @@ public class GraphController implements Initializable {
     }
 
     @FXML
-    protected void openSatWindow(){
+    protected void openSatWindow() {
         var app = new SatApplication();
         try {
             app.start(new Stage());
@@ -193,44 +190,40 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void createGraphNode(MouseEvent event) {
-
         double x = event.getX();
         double y = event.getY();
 
         if (inDrawableRange(x, y, drawingPane)) {
             if (nodeCreationButton.isSelected()) {
-
                 nodeCounter++;
                 GraphNode node = new GraphNode(x, y, nodeCounter);
                 node.toBack();
-
                 this.nodeList.add(node);
                 graph.add(node);
                 drawingPane.getChildren().add(node);
                 objectsOnPane.add(node);
+            }
+            else if (edgeCreationButton.isSelected() && event.getTarget() instanceof GraphNode node) {
+                if (selectedNodeList.size() == 0) {
+                    selectedNodeList.add(node);
+                    node.select();
+                } else if (!node.equals(selectedNodeList.get(0))) {
+                    selectedNodeList.add(node);
+                    GraphNode n1 = selectedNodeList.get(0);
+                    GraphNode n2 = selectedNodeList.get(1);
 
-            } else {
-                if (edgeCreationButton.isSelected() && event.getTarget() instanceof GraphNode node) {
-                    if (selectedNodeList.size() == 0) {
-                        selectedNodeList.add(node);
-                        node.select();
-                    } else if (!node.equals(selectedNodeList.get(0))) {
-                        selectedNodeList.add(node);
+                    boolean edgeExists = this.graph.getMatrix()[n1.getDesignation()-1][n2.getDesignation()-1] == 1;
 
-                        GraphNode n1 = selectedNodeList.get(0);
-                        GraphNode n2 = selectedNodeList.get(1);
-
+                    if (!edgeExists) {
                         Line line = Drawer.lineFromNodeToNode(n1, n2, drawingPane);
+                        n1.setStartEdge(line);
+                        n2.setEndEdgeList(line);
                         objectsOnPane.add(line);
-
                         graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation());
-
-                        selectedNodeList.forEach(GraphNode::unselect);
-
-                        selectedNodeList.clear();
                     }
 
-
+                    selectedNodeList.forEach(GraphNode::unselect);
+                    selectedNodeList.clear();
                 }
             }
         }
@@ -304,32 +297,23 @@ public class GraphController implements Initializable {
     protected void solveSat() {
         String text = cnfTextArea.getText();
         var satInput = StringToList.fromStringAsList(text);
-
         Solver dpll = new DPLL();
-
         dpll.init(satInput);
         dpll.solve();
         String result = dpll.result();
-
         satSolverOutTextArea.setText(String.join("\n", result.split(" ")));
-
-
         if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
             this.colorMap = createColorMap(colorsAmount);
-
             List<Integer> out = Arrays.stream(result.split(" "))
                     .map(Integer::parseInt)
                     .toList();
-
             int nodeIndex;
             int colorIndex;
             int i = 0;
-
             for (var e : out) {
                 if (e > 0) {
                     nodeIndex = i / colorsAmount;
                     colorIndex = i % colorsAmount;
-                    //  System.out.println(nodeIndex + " " + colorIndex);
                     graph.getNodes().get(nodeIndex).setFill(this.colorMap.get(colorIndex));
                 }
                 i++;
@@ -366,13 +350,11 @@ public class GraphController implements Initializable {
         }
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String[] problems = {"Раскраска графа", "Гамильтонов путь"};
         this.problemChoiceBox.getItems().addAll(problems);
         this.problemChoiceBox.setValue("Раскраска графа");
-
 
         ToggleGroup edgeNodeGroup = new ToggleGroup();
         this.nodeCreationButton.setToggleGroup(edgeNodeGroup);
@@ -382,20 +364,32 @@ public class GraphController implements Initializable {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof GraphNode) {
                     ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(1));
+                    ((GraphNode) c).makeDraggable(false);
                 }
+            });
+            else if (!edgeCreationButton.isSelected()) drawingPane.getChildren().forEach(c ->{
+                if (c instanceof  GraphNode) ((GraphNode) c).makeDraggable(true);
             });
         });
 
         this.edgeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof GraphNode) {
-                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(0.7));
+                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(0.6));
+                    ((GraphNode) c).makeDraggable(false);
+                }
+                else if (c instanceof Line) {
+                    ((Line) c).setStroke(Color.rgb(30, 30, 30));
                 }
             });
             else {
                 drawingPane.getChildren().forEach(c -> {
                     if (c instanceof GraphNode) {
                         ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(1));
+                        if (!nodeCreationButton.isSelected()) ((GraphNode) c).makeDraggable(true);
+                    }
+                    else if (c instanceof Line) {
+                        ((Line) c).setStroke(Color.rgb(180, 180, 180));
                     }
                 });
             }
