@@ -77,6 +77,8 @@ public class GraphController implements Initializable {
 
         if (file != null) {
             try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+                this.edgeCreationButton.setSelected(false);
+                this.nodeCreationButton.setSelected(false);
 
                 this.graph = new Graph();
                 this.drawingPane.getChildren().clear();
@@ -113,6 +115,7 @@ public class GraphController implements Initializable {
 
                     nodeCounter++;
                     GraphNode node = new GraphNode(x, y, name);
+                    node.makeDraggable(true);
                     this.graph.getNodes().add(node);
                     drawingPane.getChildren().add(node);
                 }
@@ -120,7 +123,7 @@ public class GraphController implements Initializable {
                 for (int i = 0; i < k; i++) {
                     for (int j = i; j < k; j++) {
                         if (this.graph.getMatrix()[i][j] == 1) {
-                            Drawer.lineFromNodeToNode(this.graph.getNodes().get(i), this.graph.getNodes().get(j), this.drawingPane);
+                            addEdge(this.graph.getNodes().get(i), this.graph.getNodes().get(j), drawingPane, objectsOnPane);
                         }
                     }
                 }
@@ -129,6 +132,13 @@ public class GraphController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    private void addEdge(GraphNode n1, GraphNode n2, Pane pane, List<Object> objectList){
+        Line line = Drawer.lineFromNodeToNode(n1, n2, pane);
+        n1.setStartEdge(line);
+        n2.setEndEdgeList(line);
+        objectList.add(line);
     }
 
     @FXML
@@ -224,10 +234,7 @@ public class GraphController implements Initializable {
                     boolean edgeExists = this.graph.getMatrix()[n1.getDesignation()-1][n2.getDesignation()-1] == 1;
 
                     if (!edgeExists) {
-                        Line line = Drawer.lineFromNodeToNode(n1, n2, drawingPane);
-                        n1.setStartEdge(line);
-                        n2.setEndEdgeList(line);
-                        objectsOnPane.add(line);
+                        addEdge(n1, n2, drawingPane, objectsOnPane);
                         graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation());
                     }
 

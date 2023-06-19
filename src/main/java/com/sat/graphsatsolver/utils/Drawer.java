@@ -3,7 +3,6 @@ package com.sat.graphsatsolver.utils;
 import com.sat.graphsatsolver.controllers.GraphController;
 import com.sat.graphsatsolver.gui.GraphNode;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 
 public class Drawer {
@@ -12,6 +11,7 @@ public class Drawer {
 
         line.setStroke(GraphController.EDGE_SELECTED_COLOR);
         line.setStrokeWidth(3);
+
 
         line.setStartX(n1.getCenterX());
         line.setStartY(n1.getCenterY());
