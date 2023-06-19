@@ -36,6 +36,8 @@ public class GraphController implements Initializable {
     private HashMap<Integer, Color> colorMap;
     private int nodeCounter;
 
+    public static final Color EDGE_SELECTED_COLOR = Color.rgb(100, 100, 100);
+
     @FXML
     public Pane drawingPane;
     @FXML
@@ -193,6 +195,12 @@ public class GraphController implements Initializable {
         double x = event.getX();
         double y = event.getY();
 
+        if (x < GraphNode.NODE_RADIUS) x = GraphNode.NODE_RADIUS;
+        else if (x > drawingPane.getWidth() - GraphNode.NODE_RADIUS - 1) x = drawingPane.getWidth() - GraphNode.NODE_RADIUS - 1;
+
+        if (y < GraphNode.NODE_RADIUS) y = GraphNode.NODE_RADIUS;
+        else if (y > drawingPane.getHeight() - GraphNode.NODE_RADIUS - 1) y = drawingPane.getHeight() - GraphNode.NODE_RADIUS - 1;
+
         if (inDrawableRange(x, y, drawingPane)) {
             if (nodeCreationButton.isSelected()) {
                 nodeCounter++;
@@ -207,7 +215,8 @@ public class GraphController implements Initializable {
                 if (selectedNodeList.size() == 0) {
                     selectedNodeList.add(node);
                     node.select();
-                } else if (!node.equals(selectedNodeList.get(0))) {
+                }
+                else if (!node.equals(selectedNodeList.get(0))) {
                     selectedNodeList.add(node);
                     GraphNode n1 = selectedNodeList.get(0);
                     GraphNode n2 = selectedNodeList.get(1);
@@ -224,6 +233,10 @@ public class GraphController implements Initializable {
 
                     selectedNodeList.forEach(GraphNode::unselect);
                     selectedNodeList.clear();
+                }
+                else {
+                    selectedNodeList.clear();
+                    node.unselect();
                 }
             }
         }
@@ -363,7 +376,7 @@ public class GraphController implements Initializable {
         this.nodeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof GraphNode) {
-                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(1));
+                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_SELECTED));
                     ((GraphNode) c).makeDraggable(false);
                 }
             });
@@ -375,18 +388,20 @@ public class GraphController implements Initializable {
         this.edgeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof GraphNode) {
-                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(0.6));
+                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_UNSELECTED));
                     ((GraphNode) c).makeDraggable(false);
+
                 }
                 else if (c instanceof Line) {
-                    ((Line) c).setStroke(Color.rgb(30, 30, 30));
+                    ((Line) c).setStroke(EDGE_SELECTED_COLOR);
                 }
             });
             else {
                 drawingPane.getChildren().forEach(c -> {
                     if (c instanceof GraphNode) {
-                        ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(1));
+                        ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_SELECTED));
                         if (!nodeCreationButton.isSelected()) ((GraphNode) c).makeDraggable(true);
+
                     }
                     else if (c instanceof Line) {
                         ((Line) c).setStroke(Color.rgb(180, 180, 180));

@@ -1,10 +1,8 @@
 package com.sat.graphsatsolver.controllers;
 
-import com.sat.graphsatsolver.gui.Graph;
-import com.sat.graphsatsolver.gui.GraphNode;
 import com.sat.graphsatsolver.solvers.DPLL;
-import com.sat.graphsatsolver.utils.Drawer;
 import com.sat.graphsatsolver.utils.StringToList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

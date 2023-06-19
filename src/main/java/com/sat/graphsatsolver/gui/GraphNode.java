@@ -1,5 +1,6 @@
 package com.sat.graphsatsolver.gui;
 
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -21,9 +22,10 @@ public class GraphNode extends StackPane {
             "-fx-stroke: wheat;" +
             "-fx-stroke-width: 2";
 
-    private final double OPACITY_SELECTED = 1;
-    private final double OPACITY_UNSELECTED = 0.7;
-    private final double RADIUS = 30;
+    public static final double OPACITY_SELECTED = 0.99;
+    public static final double OPACITY_UNSELECTED = 0.6;
+    private final static double CIRCLE_RADIUS = 30;
+    public final static double NODE_RADIUS = 32;
     private boolean selected;
     private int designation;
     private double centerX;
@@ -41,7 +43,7 @@ public class GraphNode extends StackPane {
         circle = new Circle();
         label = new Label();
 
-        circle.setRadius(RADIUS);
+        circle.setRadius(CIRCLE_RADIUS);
         label.setText(String.valueOf(designation));
 
         circle.setStyle(CIRCLE_STYLE);
@@ -51,8 +53,8 @@ public class GraphNode extends StackPane {
         label.setMouseTransparent(true);
 
         this.getChildren().addAll(circle, label);
-        this.setLayoutX(x - RADIUS);
-        this.setLayoutY(y - RADIUS);
+        this.setLayoutX(x - CIRCLE_RADIUS);
+        this.setLayoutY(y - CIRCLE_RADIUS);
         this.setCenterX(x);
         this.setCenterY(y);
     }
@@ -106,6 +108,10 @@ public class GraphNode extends StackPane {
         this.endEdgeList.add(edge);
     }
 
+    public Circle getCircle() {
+        return circle;
+    }
+
     public double getCenterY() {
         return this.centerY;
     }
@@ -118,9 +124,14 @@ public class GraphNode extends StackPane {
     public void makeDraggable(boolean selected) {
 
         if (selected) {
+
             this.setOnMousePressed(event -> {
+                this.circle.setStroke(Color.RED);
+
                 mouseAnchorX = event.getX();
                 mouseAnchorY = event.getY();
+
+                this.setCursor(Cursor.CLOSED_HAND);
             });
 
             this.setOnMouseDragged(event -> {
@@ -144,21 +155,25 @@ public class GraphNode extends StackPane {
 
                 if (this.endEdgeList != null) {
                     this.endEdgeList.forEach(e -> {
-                        e.setEndX(posX + RADIUS);
-                        e.setEndY(posY + RADIUS);
+                        e.setEndX(posX + NODE_RADIUS);
+                        e.setEndY(posY + NODE_RADIUS);
                     });
                 }
                 if (this.startEdgeList != null) {
                     this.startEdgeList.forEach(e -> {
-                        e.setStartX(posX + RADIUS);
-                        e.setStartY(posY + RADIUS);
+                        e.setStartX(posX + NODE_RADIUS);
+                        e.setStartY(posY + NODE_RADIUS);
                     });
                 }
             });
 
             this.setOnMouseReleased(e -> {
-                this.setCenterX(this.getLayoutX() + RADIUS);
-                this.setCenterY(this.getLayoutY() + RADIUS);
+                this.circle.setStroke(Color.WHEAT);
+
+                this.setCenterX(this.getLayoutX() + NODE_RADIUS);
+                this.setCenterY(this.getLayoutY() + NODE_RADIUS);
+
+                this.setCursor(Cursor.DEFAULT);
             });
         } else {
             this.setOnMousePressed(null);
