@@ -121,19 +121,5 @@ public class DIMACSConverter {
 
         return res.toString();
     }
-    private static Map<Integer, Integer> decodeSATResults(int[] variableAssignments, int numberOfNodes, int numberOfColors) {
-        Map<Integer, Integer> vertexColors = new HashMap<>();
-
-        for (int i = 0; i < numberOfNodes * numberOfColors; i++) {
-            if (variableAssignments[i] > 0) {
-                System.out.println(i);
-                int vertex = i / numberOfColors + 1;
-                int color = i % numberOfColors + 1;
-                vertexColors.put(vertex, color);
-            }
-        }
-
-        return vertexColors;
-    }
 
 }
