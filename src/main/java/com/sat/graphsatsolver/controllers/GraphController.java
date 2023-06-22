@@ -35,7 +35,7 @@ public class GraphController implements Initializable {
     private int colorsAmount;
     private HashMap<Integer, Color> colorMap;
     private int nodeCounter;
-
+    private Problem currentProblem;
     public static final Color EDGE_SELECTED_COLOR = Color.rgb(100, 100, 100);
 
     @FXML
@@ -298,7 +298,10 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void generateCnf() {
+        this.satSolverOutTextArea.clear();
+
         if ("Раскраска графа".equalsIgnoreCase(problemChoiceBox.getValue())) {
+            currentProblem = Problem.GRAPH_COLORING;
 
             nodeCreationButton.setSelected(false);
             edgeCreationButton.setSelected(false);
@@ -307,9 +310,9 @@ public class GraphController implements Initializable {
 
             cnfTextArea.setText(DIMACSConverter.graphColoring(graph.getMatrix(), colorsAmount));
         } else if ("Гамильтонов путь".equalsIgnoreCase(problemChoiceBox.getValue())) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setContentText("Задача о поиске гамильтонова пути в графе находится в разработке.");
-            alert.show();
+            currentProblem = Problem.HAMILTONIAN_CYCLE_PATH;
+
+            cnfTextArea.setText(DIMACSConverter.hamiltonianCyclePath(graph.getMatrix()));
         }
     }
 
@@ -322,23 +325,32 @@ public class GraphController implements Initializable {
         dpll.solve();
         String result = dpll.result();
         satSolverOutTextArea.setText(String.join("\n", result.split(" ")));
-        if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
-            this.colorMap = createColorMap(colorsAmount);
-            List<Integer> out = Arrays.stream(result.split(" "))
-                    .map(Integer::parseInt)
-                    .toList();
-            int nodeIndex;
-            int colorIndex;
-            int i = 0;
-            for (var e : out) {
-                if (e > 0) {
-                    nodeIndex = i / colorsAmount;
-                    colorIndex = i % colorsAmount;
-                    graph.getNodes().get(nodeIndex).setFill(this.colorMap.get(colorIndex));
+
+        switch (currentProblem) {
+            case GRAPH_COLORING -> {
+                if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
+                    this.colorMap = createColorMap(colorsAmount);
+                    List<Integer> out = Arrays.stream(result.split(" "))
+                            .map(Integer::parseInt)
+                            .toList();
+                    int nodeIndex;
+                    int colorIndex;
+                    int i = 0;
+                    for (var e : out) {
+                        if (e > 0) {
+                            nodeIndex = i / colorsAmount;
+                            colorIndex = i % colorsAmount;
+                            graph.getNodes().get(nodeIndex).setFill(this.colorMap.get(colorIndex));
+                        }
+                        i++;
+                    }
                 }
-                i++;
+            }
+            case HAMILTONIAN_CYCLE_PATH -> {
+                System.out.println("Строю путь");
             }
         }
+
     }
 
     private boolean inDrawableRange(double x, double y, Pane pane) {
@@ -375,6 +387,7 @@ public class GraphController implements Initializable {
         String[] problems = {"Раскраска графа", "Гамильтонов путь"};
         this.problemChoiceBox.getItems().addAll(problems);
         this.problemChoiceBox.setValue("Раскраска графа");
+        currentProblem = Problem.GRAPH_COLORING;
 
         ToggleGroup edgeNodeGroup = new ToggleGroup();
         this.nodeCreationButton.setToggleGroup(edgeNodeGroup);

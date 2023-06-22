@@ -71,7 +71,57 @@ public class DIMACSConverter {
         return dimacs.toString();
     }
 
-    public static Map<Integer, Integer> decodeSATResults(int[] variableAssignments, int numberOfNodes, int numberOfColors) {
+    public static String hamiltonianCyclePath(int[][] matrix){
+        int vNum = matrix.length;
+
+        StringBuilder res = new StringBuilder();
+
+        for (int i = 0; i < vNum; i++) {
+            for (int j = 0; j < vNum; j++) {
+                res.append(i * vNum + j +1).append(" ");
+            }
+            res.append("0\n");
+
+            for (int j = 0; j < vNum; j++) {
+                res.append(j * vNum + i + 1).append(" ");
+            }
+            res.append("0\n");
+
+            for (int j = 0; j < vNum - 1; j++) {
+                for (int k = j + 1; k < vNum; k++) {
+                    res.append(-(i * vNum + j + 1)).append(" ").append(-(i * vNum + k + 1)).append(" 0\n");
+                }
+            }
+
+            for (int j = 0; j < vNum; j++) {
+                for (int k = i; k < vNum - 1; k++) {
+                    res.append(-(i*vNum + j+1)).append(" ").append(-((k+1) * vNum + j + 1)).append(" 0\n");
+                }
+            }
+        }
+
+        for (int i = 0; i < vNum - 1; i++) {
+            for (int j = i + 1; j < vNum; j++) {
+                if (matrix[i][j] == 0) {
+                    for (int k = 1; k < vNum; k++) {
+                        int n1 = i * vNum + k;
+                        int n2 = j * vNum + k + 1;
+                        res.append(-n1).append(" ").append(-n2).append(" 0\n");
+                        // System.out.println(n1 + " " + n2);
+
+                        int k1 = j * vNum + k;
+                        int k2 = i * vNum + k + 1;
+                        res.append(-k1).append(" ").append(-k2).append(" 0\n");
+                        // System.out.println(k1 + " " + k2);
+                    }
+                }
+            }
+        }
+        res.delete(res.length() - 1, res.length());
+
+        return res.toString();
+    }
+    private static Map<Integer, Integer> decodeSATResults(int[] variableAssignments, int numberOfNodes, int numberOfColors) {
         Map<Integer, Integer> vertexColors = new HashMap<>();
 
         for (int i = 0; i < numberOfNodes * numberOfColors; i++) {
