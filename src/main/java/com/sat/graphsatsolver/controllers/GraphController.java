@@ -26,17 +26,17 @@ import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.sat.graphsatsolver.utils.ColorScheme.*;
+
 public class GraphController implements Initializable {
 
     private final List<Vertex> selectedNodeList = new LinkedList<>();
     private final List<Vertex> nodeList = new LinkedList<>();
     private Graph graph = new Graph();
-    private List<Object> objectsOnPane = new LinkedList<>();
+    private final List<Object> objectsOnPane = new LinkedList<>();
     private int colorsAmount;
-    private HashMap<Integer, Color> colorMap;
     private int nodeCounter;
     private Problem currentProblem;
-    public static final Color EDGE_SELECTED_COLOR = Color.rgb(100, 100, 100);
 
     @FXML
     public Pane drawingPane;
@@ -116,14 +116,15 @@ public class GraphController implements Initializable {
                     nodeCounter++;
                     Vertex node = new Vertex(x, y, name);
                     node.makeDraggable(true);
-                    this.graph.getNodes().add(node);
+                    this.graph.getVertexes().add(node);
                     drawingPane.getChildren().add(node);
                 }
 
                 for (int i = 0; i < k; i++) {
                     for (int j = i; j < k; j++) {
                         if (this.graph.getMatrix()[i][j] == 1) {
-                            addEdge(this.graph.getNodes().get(i), this.graph.getNodes().get(j), drawingPane, objectsOnPane);
+                            Edge edge = createEdge(this.graph.getVertexes().get(i), this.graph.getVertexes().get(j), drawingPane, objectsOnPane);
+                            this.graph.setEdge(i + 1, j + 1, edge);
                         }
                     }
                 }
@@ -134,11 +135,12 @@ public class GraphController implements Initializable {
         }
     }
 
-    private void addEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
-        Edge line = Drawer.edgeFromVertexToVertex(n1, n2, pane);
-        n1.setStartEdge(line);
-        n2.setEndEdgeList(line);
-        objectList.add(line);
+    private Edge createEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
+        Edge edge = Drawer.edgeFromVertexToVertex(n1, n2, pane);
+        n1.setStartEdge(edge);
+        n2.setEndEdgeList(edge);
+        objectList.add(edge);
+        return edge;
     }
 
     @FXML
@@ -158,9 +160,7 @@ public class GraphController implements Initializable {
                 int[][] matrix = this.graph.getMatrix();
 
                 for (var r : matrix) {
-                    writer.write(Arrays.stream(r)
-                            .mapToObj(String::valueOf)
-                            .collect(Collectors.joining(" ")) + "\n");
+                    writer.write(Arrays.stream(r).mapToObj(String::valueOf).collect(Collectors.joining(" ")) + "\n");
                 }
 
                 writer.write(this.graph.getCapacity() + "\n");
@@ -168,12 +168,10 @@ public class GraphController implements Initializable {
                 int[][] hiddenMatrix = this.graph.getHiddenAdjacencyMatrix();
 
                 for (var r : hiddenMatrix) {
-                    writer.write(Arrays.stream(r)
-                            .mapToObj(String::valueOf)
-                            .collect(Collectors.joining(" ")) + "\n");
+                    writer.write(Arrays.stream(r).mapToObj(String::valueOf).collect(Collectors.joining(" ")) + "\n");
                 }
 
-                for (var n : graph.getNodes()) {
+                for (var n : graph.getVertexes()) {
                     writer.write(n.getDesignation() + " " + n.getCenterX() + " " + n.getCenterY() + "\n");
                 }
 
@@ -234,8 +232,8 @@ public class GraphController implements Initializable {
                     boolean edgeExists = this.graph.getMatrix()[n1.getDesignation() - 1][n2.getDesignation() - 1] == 1;
 
                     if (!edgeExists) {
-                        addEdge(n1, n2, drawingPane, objectsOnPane);
-                        graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation());
+                        Edge edge = createEdge(n1, n2, drawingPane, objectsOnPane);
+                        graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation(), edge);
                     }
 
                     selectedNodeList.forEach(Vertex::unselect);
@@ -280,7 +278,8 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void colorsToDefault() {
-        this.graph.getNodes().forEach(Vertex::resetStyle);
+        graph.getVertexes().forEach(Vertex::resetStyle);
+        graph.getEdges().forEach(Edge::resetStyle);
     }
 
     @FXML
@@ -297,6 +296,8 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void generateCnf() {
+        colorsToDefault();
+
         this.satSolverOutTextArea.clear();
         this.nodeCreationButton.setSelected(false);
         this.edgeCreationButton.setSelected(false);
@@ -331,10 +332,8 @@ public class GraphController implements Initializable {
             switch (currentProblem) {
                 case GRAPH_COLORING -> {
 
-                    this.colorMap = createColorMap(colorsAmount);
-                    List<Integer> out = Arrays.stream(result.split(" "))
-                            .map(Integer::parseInt)
-                            .toList();
+                    HashMap<Integer, Color> colorMap = createColorMap(colorsAmount);
+                    List<Integer> out = Arrays.stream(result.split(" ")).map(Integer::parseInt).toList();
                     int nodeIndex;
                     int colorIndex;
                     int i = 0;
@@ -342,15 +341,13 @@ public class GraphController implements Initializable {
                         if (e > 0) {
                             nodeIndex = i / colorsAmount;
                             colorIndex = i % colorsAmount;
-                            graph.getNodes().get(nodeIndex).setFill(this.colorMap.get(colorIndex));
+                            graph.getVertexes().get(nodeIndex).setFill(colorMap.get(colorIndex));
                         }
                         i++;
                     }
                 }
                 case HAMILTONIAN_CYCLE_PATH -> {
-                    int[] out = Arrays.stream(result.split(" "))
-                            .mapToInt(Integer::parseInt)
-                            .toArray();
+                    int[] out = Arrays.stream(result.split(" ")).mapToInt(Integer::parseInt).toArray();
 
                     HashMap<Integer, Integer> resultMap = new HashMap<>();
 
@@ -362,20 +359,16 @@ public class GraphController implements Initializable {
                     }
 
                     for (int i = 1; i <= graph.getSize() - 1; i++) {
-                        Vertex g1 = graph.getNodes().get(resultMap.get(i) - 1);
-                        Vertex g2 = graph.getNodes().get(resultMap.get(i+1) - 1);
+                        Vertex g1 = graph.getVertexes().get(resultMap.get(i) - 1);
+                        Vertex g2 = graph.getVertexes().get(resultMap.get(i + 1) - 1);
 
+                        graph.getEdges().forEach(e -> {
+                            if (e.getFrom().equals(g1) && e.getTo().equals(g2) || e.getTo().equals(g1) && e.getFrom().equals(g2))
+                                e.setStroke(HAMILTONIAN_PATH_COLOR);
+                        });
 
-
-
-                        Edge line = Drawer.edgeFromVertexToVertex(g1,g2, this.drawingPane);
-                        line.setStroke(Color.RED);
-                        line.setStrokeWidth(6);
-
-
-                        g1.setFill(Color.RED);
+                        graph.getVertexes().forEach(n -> n.getCircle().setStroke(HAMILTONIAN_PATH_COLOR));
                     }
-                    graph.getNodes().get(resultMap.get(graph.getSize()) - 1).setFill(Color.RED);
                 }
             }
         }
@@ -425,7 +418,7 @@ public class GraphController implements Initializable {
         this.nodeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof Vertex) {
-                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_SELECTED));
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_ACTIVE));
                     ((Vertex) c).makeDraggable(false);
                 }
             });
@@ -437,7 +430,7 @@ public class GraphController implements Initializable {
         this.edgeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof Vertex) {
-                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_UNSELECTED));
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_DISABLED));
                     ((Vertex) c).makeDraggable(false);
 
                 } else if (c instanceof Line) {
@@ -447,11 +440,11 @@ public class GraphController implements Initializable {
             else {
                 drawingPane.getChildren().forEach(c -> {
                     if (c instanceof Vertex) {
-                        ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_SELECTED));
+                        ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_ACTIVE));
                         if (!nodeCreationButton.isSelected()) ((Vertex) c).makeDraggable(true);
 
                     } else if (c instanceof Line) {
-                        ((Line) c).setStroke(Color.rgb(180, 180, 180));
+                        ((Line) c).setStroke(EDGE_UNSELECTED_COLOR);
                     }
                 });
             }

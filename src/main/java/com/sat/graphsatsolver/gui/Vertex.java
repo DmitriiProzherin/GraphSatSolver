@@ -9,21 +9,14 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
+import static com.sat.graphsatsolver.utils.ColorScheme.*;
+import static com.sat.graphsatsolver.utils.Style.*;
+
 public class Vertex extends StackPane {
 
     private final Circle circle;
     private final Label label;
 
-    private final String LABEL_STYLE = "-fx-font-weight: bold;" +
-            "-fx-text-fill: white;" +
-            "-fx-font-size: 20;";
-
-    private final String CIRCLE_STYLE = "-fx-fill: grey;" +
-            "-fx-stroke: wheat;" +
-            "-fx-stroke-width: 2";
-
-    public static final double OPACITY_SELECTED = 0.99;
-    public static final double OPACITY_UNSELECTED = 0.6;
     private final static double CIRCLE_RADIUS = 30;
     public final static double NODE_RADIUS = 32;
     private boolean selected;
@@ -75,16 +68,16 @@ public class Vertex extends StackPane {
 
     public void select() {
         this.selected = true;
-        this.circle.setOpacity(OPACITY_SELECTED);
-        this.label.setOpacity(OPACITY_SELECTED);
-        this.circle.setStroke(Color.RED);
+        this.circle.setOpacity(VERTEX_OPACITY_ACTIVE);
+        this.label.setOpacity(VERTEX_OPACITY_ACTIVE);
+        this.circle.setStroke(VERTEX_CIRCLE_STROKE_SELECTED);
     }
 
     public void unselect() {
         this.selected = false;
-        this.circle.setOpacity(OPACITY_UNSELECTED);
-        this.label.setOpacity(OPACITY_UNSELECTED);
-        this.circle.setStroke(Color.WHEAT);
+        this.circle.setOpacity(VERTEX_OPACITY_DISABLED);
+        this.label.setOpacity(VERTEX_OPACITY_DISABLED);
+        this.circle.setStroke(VERTEX_CIRCLE_STROKE_DEFAULT);
     }
 
     public void setCenterX(double x) {
@@ -126,7 +119,6 @@ public class Vertex extends StackPane {
         if (selected) {
 
             this.setOnMousePressed(event -> {
-                this.circle.setStroke(Color.RED);
 
                 mouseAnchorX = event.getX();
                 mouseAnchorY = event.getY();
@@ -168,7 +160,6 @@ public class Vertex extends StackPane {
             });
 
             this.setOnMouseReleased(e -> {
-                this.circle.setStroke(Color.WHEAT);
 
                 this.setCenterX(this.getLayoutX() + NODE_RADIUS);
                 this.setCenterY(this.getLayoutY() + NODE_RADIUS);

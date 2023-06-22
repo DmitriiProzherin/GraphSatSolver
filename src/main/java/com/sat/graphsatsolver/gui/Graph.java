@@ -3,7 +3,8 @@ package com.sat.graphsatsolver.gui;
 import java.util.ArrayList;
 
 public class Graph {
-    private ArrayList<Vertex> nodes;
+    private ArrayList<Vertex> vertexes;
+    private ArrayList<Edge> edges;
 
     private int size;
 
@@ -13,14 +14,15 @@ public class Graph {
 
     private int[][] adjacencyMatrix;
 
-    public Graph(){
-        nodes = new ArrayList<>();
+    public Graph() {
+        vertexes = new ArrayList<>();
+        edges = new ArrayList<>();
         capacity = 10;
         hiddenAdjacencyMatrix = new int[capacity][capacity];
     }
 
-    public void add(Vertex node){
-        nodes.add(node);
+    public void add(Vertex node) {
+        vertexes.add(node);
         size++;
 
         if (size > capacity) {
@@ -42,7 +44,7 @@ public class Graph {
         }
     }
 
-    public int[][] getMatrix(){
+    public int[][] getMatrix() {
         adjacencyMatrix = new int[size][size];
 
         for (int i = 0; i < size; i++) {
@@ -83,19 +85,33 @@ public class Graph {
         return adjacencyMatrix;
     }
 
-    public void clear(){
+    public void setVertexes(ArrayList<Vertex> vertexes) {
+        this.vertexes = vertexes;
+    }
+
+    public ArrayList<Edge> getEdges() {
+        return edges;
+    }
+
+    public void setEdges(ArrayList<Edge> edges) {
+        this.edges = edges;
+    }
+
+    public void clear() {
         capacity = 10;
         size = 0;
         hiddenAdjacencyMatrix = new int[capacity][capacity];
-        nodes.clear();
+        vertexes.clear();
     }
 
-    public ArrayList<Vertex> getNodes(){
-        return nodes;
+    public ArrayList<Vertex> getVertexes() {
+        return vertexes;
     }
 
-    public void setEdge(int r, int c) {
-        hiddenAdjacencyMatrix[r-1][c-1] = 1;
-        hiddenAdjacencyMatrix[c-1][r-1] = 1;
+    public void setEdge(int r, int c, Edge edge) {
+        hiddenAdjacencyMatrix[r - 1][c - 1] = 1;
+        hiddenAdjacencyMatrix[c - 1][r - 1] = 1;
+
+        this.edges.add(edge);
     }
 }
