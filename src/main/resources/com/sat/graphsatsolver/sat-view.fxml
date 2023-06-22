@@ -25,11 +25,6 @@
               <MenuItem fx:id="satRunMenuItem" mnemonicParsing="false" onAction="#satRun" text="DPLL" />
             </items>
           </Menu>
-          <Menu mnemonicParsing="false" text="Помощь">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Справка" />
-            </items>
-          </Menu>
         </menus>
       </MenuBar>
       <HBox layoutY="33.0" prefHeight="669.0" prefWidth="458.0" style="-fx-padding: 10;">

@@ -31,13 +31,18 @@
                   <MenuItem mnemonicParsing="false" onAction="#systemExit" text="Выход" />
             </items>
           </Menu>
+            <Menu mnemonicParsing="false" text="Помощь">
+              <items>
+                <MenuItem mnemonicParsing="false" onAction="#openHelpWindow" text="Справка" />
+              </items>
+            </Menu>
         </menus>
       </MenuBar>
       <HBox layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="1000.0" style="-fx-padding: 20;">
          <children>
             <VBox prefHeight="573.0" prefWidth="153.0">
                <children>
-                  <ToggleButton fx:id="nodeCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Вершина" />
+                  <ToggleButton fx:id="vertexCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Вершина" />
                   <Separator prefWidth="200.0" />
                   <ToggleButton fx:id="edgeCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Ребро" />
                   <Separator prefWidth="200.0" />

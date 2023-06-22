@@ -1,5 +1,6 @@
 package com.sat.graphsatsolver.controllers;
 
+import com.sat.graphsatsolver.HelpApplication;
 import com.sat.graphsatsolver.SatApplication;
 import com.sat.graphsatsolver.gui.*;
 import com.sat.graphsatsolver.solvers.DPLL;
@@ -21,7 +22,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,18 +30,18 @@ import static com.sat.graphsatsolver.utils.ColorScheme.*;
 
 public class GraphController implements Initializable {
 
-    private final List<Vertex> selectedNodeList = new LinkedList<>();
-    private final List<Vertex> nodeList = new LinkedList<>();
+    private final List<Vertex> selectedVertexList = new LinkedList<>();
+    private final List<Vertex> vertexList = new LinkedList<>();
     private Graph graph = new Graph();
     private final List<Object> objectsOnPane = new LinkedList<>();
     private int colorsAmount;
-    private int nodeCounter;
+    private int vertexCounter;
     private Problem currentProblem;
 
     @FXML
     public Pane drawingPane;
     @FXML
-    public ToggleButton nodeCreationButton;
+    public ToggleButton vertexCreationButton;
     @FXML
     public ToggleButton edgeCreationButton;
     @FXML
@@ -80,7 +80,7 @@ public class GraphController implements Initializable {
         if (file != null) {
             try (BufferedReader br = Files.newBufferedReader(file.toPath())) {
                 this.edgeCreationButton.setSelected(false);
-                this.nodeCreationButton.setSelected(false);
+                this.vertexCreationButton.setSelected(false);
 
                 this.graph = new Graph();
                 this.drawingPane.getChildren().clear();
@@ -108,7 +108,7 @@ public class GraphController implements Initializable {
                 double y;
                 int name;
                 String[] arr;
-                nodeCounter = 0;
+                vertexCounter = 0;
 
                 if (br.ready()) {
                     for (int i = 1; i <= k; i++) {
@@ -118,7 +118,7 @@ public class GraphController implements Initializable {
                         x = Double.parseDouble(arr[1]);
                         y = Double.parseDouble(arr[2]);
 
-                        nodeCounter++;
+                        vertexCounter++;
                         Vertex node = new Vertex(x, y, name);
                         node.makeDraggable(true);
                         this.graph.getVertexes().add(node);
@@ -153,7 +153,7 @@ public class GraphController implements Initializable {
                             }
                         }
 
-                        nodeCounter++;
+                        vertexCounter++;
                         Vertex node = new Vertex(x, y, name);
                         node.makeDraggable(true);
                         this.graph.getVertexes().add(node);
@@ -226,6 +226,16 @@ public class GraphController implements Initializable {
     }
 
     @FXML
+    protected void openHelpWindow(){
+        var app = new HelpApplication();
+        try {
+            app.start(new Stage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @FXML
     protected void createGraphNode(MouseEvent event) {
         double x = event.getX();
         double y = event.getY();
@@ -239,34 +249,34 @@ public class GraphController implements Initializable {
             y = drawingPane.getHeight() - Vertex.NODE_RADIUS - 1;
 
         if (inDrawableRange(x, y, drawingPane)) {
-            if (nodeCreationButton.isSelected()) {
-                nodeCounter++;
-                Vertex node = new Vertex(x, y, nodeCounter);
+            if (vertexCreationButton.isSelected()) {
+                vertexCounter++;
+                Vertex node = new Vertex(x, y, vertexCounter);
                 node.toBack();
-                this.nodeList.add(node);
+                this.vertexList.add(node);
                 graph.add(node);
                 drawingPane.getChildren().add(node);
                 objectsOnPane.add(node);
             } else if (edgeCreationButton.isSelected() && event.getTarget() instanceof Vertex node) {
-                if (selectedNodeList.size() == 0) {
-                    selectedNodeList.add(node);
+                if (selectedVertexList.size() == 0) {
+                    selectedVertexList.add(node);
                     node.select();
-                } else if (!node.equals(selectedNodeList.get(0))) {
-                    selectedNodeList.add(node);
-                    Vertex n1 = selectedNodeList.get(0);
-                    Vertex n2 = selectedNodeList.get(1);
+                } else if (!node.equals(selectedVertexList.get(0))) {
+                    selectedVertexList.add(node);
+                    Vertex n1 = selectedVertexList.get(0);
+                    Vertex n2 = selectedVertexList.get(1);
 
                     boolean edgeExists = this.graph.getMatrix()[n1.getDesignation() - 1][n2.getDesignation() - 1] == 1;
 
                     if (!edgeExists) {
                         Edge edge = createEdge(n1, n2, drawingPane, objectsOnPane);
-                        graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation(), edge);
+                        graph.setEdge(selectedVertexList.get(0).getDesignation(), selectedVertexList.get(1).getDesignation(), edge);
                     }
 
-                    selectedNodeList.forEach(Vertex::unselect);
-                    selectedNodeList.clear();
+                    selectedVertexList.forEach(Vertex::unselect);
+                    selectedVertexList.clear();
                 } else {
-                    selectedNodeList.clear();
+                    selectedVertexList.clear();
                     node.unselect();
                 }
             }
@@ -283,7 +293,7 @@ public class GraphController implements Initializable {
 
             if (element instanceof Edge line) this.drawingPane.getChildren().remove(line);
             else if (element instanceof Vertex node) {
-                nodeCounter--;
+                vertexCounter--;
                 this.drawingPane.getChildren().remove(node);
             }
 
@@ -294,9 +304,9 @@ public class GraphController implements Initializable {
     protected void clearDrawingPane() {
         if (drawingPane.getChildren() != null) {
 
-            nodeCounter = 0;
-            selectedNodeList.clear();
-            nodeList.clear();
+            vertexCounter = 0;
+            selectedVertexList.clear();
+            vertexList.clear();
             graph.clear();
 
             drawingPane.getChildren().clear();
@@ -326,13 +336,13 @@ public class GraphController implements Initializable {
         colorsToDefault();
 
         this.satSolverOutTextArea.clear();
-        this.nodeCreationButton.setSelected(false);
+        this.vertexCreationButton.setSelected(false);
         this.edgeCreationButton.setSelected(false);
 
         if ("Раскраска графа".equalsIgnoreCase(problemChoiceBox.getValue())) {
             currentProblem = Problem.GRAPH_COLORING;
 
-            nodeCreationButton.setSelected(false);
+            vertexCreationButton.setSelected(false);
             edgeCreationButton.setSelected(false);
 
             colorsAmount = Integer.parseInt(this.colorsAmountTextField.getText());
@@ -449,10 +459,10 @@ public class GraphController implements Initializable {
         currentProblem = Problem.GRAPH_COLORING;
 
         ToggleGroup edgeNodeGroup = new ToggleGroup();
-        this.nodeCreationButton.setToggleGroup(edgeNodeGroup);
+        this.vertexCreationButton.setToggleGroup(edgeNodeGroup);
         this.edgeCreationButton.setToggleGroup(edgeNodeGroup);
 
-        this.nodeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
+        this.vertexCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof Vertex) {
                     ((Vertex) c).getChildren().forEach(n -> n.setOpacity(OPACITY_ACTIVE));
@@ -475,13 +485,13 @@ public class GraphController implements Initializable {
                 }
             });
             else {
-                selectedNodeList.forEach(Vertex::unselect);
-                selectedNodeList.clear();
+                selectedVertexList.forEach(Vertex::unselect);
+                selectedVertexList.clear();
 
                 drawingPane.getChildren().forEach(c -> {
                     if (c instanceof Vertex) {
                         ((Vertex) c).getChildren().forEach(n -> n.setOpacity(OPACITY_ACTIVE));
-                        if (!nodeCreationButton.isSelected()) ((Vertex) c).makeDraggable(true);
+                        if (!vertexCreationButton.isSelected()) ((Vertex) c).makeDraggable(true);
 
                     } else if (c instanceof Edge) {
                         c.setOpacity(OPACITY_DISABLED);
