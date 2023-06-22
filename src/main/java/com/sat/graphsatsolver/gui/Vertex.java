@@ -68,15 +68,15 @@ public class Vertex extends StackPane {
 
     public void select() {
         this.selected = true;
-        this.circle.setOpacity(VERTEX_OPACITY_ACTIVE);
-        this.label.setOpacity(VERTEX_OPACITY_ACTIVE);
+        this.circle.setOpacity(OPACITY_ACTIVE);
+        this.label.setOpacity(OPACITY_ACTIVE);
         this.circle.setStroke(VERTEX_CIRCLE_STROKE_SELECTED);
     }
 
     public void unselect() {
         this.selected = false;
-        this.circle.setOpacity(VERTEX_OPACITY_DISABLED);
-        this.label.setOpacity(VERTEX_OPACITY_DISABLED);
+        this.circle.setOpacity(OPACITY_DISABLED);
+        this.label.setOpacity(OPACITY_DISABLED);
         this.circle.setStroke(VERTEX_CIRCLE_STROKE_DEFAULT);
     }
 
@@ -111,7 +111,10 @@ public class Vertex extends StackPane {
 
 
     public void resetStyle() {
-        this.circle.setFill(Color.GREY);
+        this.circle.setOpacity(OPACITY_ACTIVE);
+        this.label.setOpacity(OPACITY_ACTIVE);
+        this.circle.setFill(VERTEX_CIRCLE_FILL_DEFAULT);
+        this.circle.setStroke(VERTEX_CIRCLE_STROKE_DEFAULT);
     }
 
     public void makeDraggable(boolean selected) {

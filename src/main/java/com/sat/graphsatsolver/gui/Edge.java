@@ -10,7 +10,8 @@ public class Edge extends Line {
 
     public Edge(){
         this.setStrokeWidth(3);
-        this.setStroke(EDGE_SELECTED_COLOR);
+        this.setStroke(EDGE_DEFAULT_COLOR);
+        this.setOpacity(OPACITY_ACTIVE);
     }
 
     public Vertex getFrom() {
@@ -35,7 +36,7 @@ public class Edge extends Line {
     }
 
     public void resetStyle(){
-        this.setStrokeWidth(3);
-        this.setStroke(EDGE_UNSELECTED_COLOR);
+        this.setOpacity(OPACITY_DISABLED);
+        this.setStroke(EDGE_DEFAULT_COLOR);
     }
 }

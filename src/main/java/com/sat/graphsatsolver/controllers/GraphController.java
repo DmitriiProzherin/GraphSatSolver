@@ -12,7 +12,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -133,6 +132,8 @@ public class GraphController implements Initializable {
                 throw new RuntimeException(e);
             }
         }
+
+        graph.getEdges().forEach(Edge::resetStyle);
     }
 
     private Edge createEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
@@ -364,10 +365,10 @@ public class GraphController implements Initializable {
 
                         graph.getEdges().forEach(e -> {
                             if (e.getFrom().equals(g1) && e.getTo().equals(g2) || e.getTo().equals(g1) && e.getFrom().equals(g2))
-                                e.setStroke(HAMILTONIAN_PATH_COLOR);
+                                e.setStroke(EDGE_HAMILTONIAN_PATH_COLOR);
                         });
 
-                        graph.getVertexes().forEach(n -> n.getCircle().setStroke(HAMILTONIAN_PATH_COLOR));
+                        graph.getVertexes().forEach(n -> n.getCircle().setStroke(EDGE_HAMILTONIAN_PATH_COLOR));
                     }
                 }
             }
@@ -418,7 +419,7 @@ public class GraphController implements Initializable {
         this.nodeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof Vertex) {
-                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_ACTIVE));
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(OPACITY_ACTIVE));
                     ((Vertex) c).makeDraggable(false);
                 }
             });
@@ -430,21 +431,24 @@ public class GraphController implements Initializable {
         this.edgeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
                 if (c instanceof Vertex) {
-                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_DISABLED));
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(OPACITY_DISABLED));
                     ((Vertex) c).makeDraggable(false);
 
-                } else if (c instanceof Line) {
-                    ((Line) c).setStroke(EDGE_SELECTED_COLOR);
+                } else if (c instanceof Edge) {
+                    c.setOpacity(OPACITY_ACTIVE);
                 }
             });
             else {
+                selectedNodeList.forEach(Vertex::unselect);
+                selectedNodeList.clear();
+
                 drawingPane.getChildren().forEach(c -> {
                     if (c instanceof Vertex) {
-                        ((Vertex) c).getChildren().forEach(n -> n.setOpacity(VERTEX_OPACITY_ACTIVE));
+                        ((Vertex) c).getChildren().forEach(n -> n.setOpacity(OPACITY_ACTIVE));
                         if (!nodeCreationButton.isSelected()) ((Vertex) c).makeDraggable(true);
 
-                    } else if (c instanceof Line) {
-                        ((Line) c).setStroke(EDGE_UNSELECTED_COLOR);
+                    } else if (c instanceof Edge) {
+                        c.setOpacity(OPACITY_DISABLED);
                     }
                 });
             }
