@@ -70,12 +70,12 @@ public class GraphController implements Initializable {
     protected void loadFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Загрузить");
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("All Files", "*.*"));
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Граф", "*.graph"));
 
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-            try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_8)) {
+            try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_16)) {
                 this.edgeCreationButton.setSelected(false);
                 this.nodeCreationButton.setSelected(false);
 
@@ -89,10 +89,12 @@ public class GraphController implements Initializable {
 
                 parse(br, k, matrix);
 
-                int m = Integer.parseInt(br.readLine());
+                int m = (int )(k * 1.5) + 1;
                 int[][] hiddenMatrix = new int[m][m];
 
-                parse(br, m, hiddenMatrix);
+                for (int i = 0; i < k; i++) {
+                    System.arraycopy(matrix[i], 0, hiddenMatrix[i], 0, k);
+                }
 
                 this.graph.setSize(k);
                 this.graph.setAdjacencyMatrix(matrix);
@@ -103,22 +105,58 @@ public class GraphController implements Initializable {
                 double y;
                 int name;
                 String[] arr;
-
                 nodeCounter = 0;
-                for (int i = 1; i <= k; i++) {
-                    textLine = br.readLine();
-                    arr = textLine.trim().split(" ");
-                    name = Integer.parseInt(arr[0]);
-                    x = Double.parseDouble(arr[1]);
-                    y = Double.parseDouble(arr[2]);
 
-                    nodeCounter++;
-                    Vertex node = new Vertex(x, y, name);
-                    node.makeDraggable(true);
-                    this.graph.getVertexes().add(node);
-                    drawingPane.getChildren().add(node);
+                if (br.ready()) {
+                    for (int i = 1; i <= k; i++) {
+                        textLine = br.readLine();
+                        arr = textLine.trim().split(" ");
+                        name = Integer.parseInt(arr[0]);
+                        x = Double.parseDouble(arr[1]);
+                        y = Double.parseDouble(arr[2]);
+
+                        nodeCounter++;
+                        Vertex node = new Vertex(x, y, name);
+                        node.makeDraggable(true);
+                        this.graph.getVertexes().add(node);
+                        drawingPane.getChildren().add(node);
+                    }
                 }
+                else {
+                    double centerX = this.drawingPane.getWidth() / 2;
+                    double centerY = this.drawingPane.getHeight() / 2;
+                    double distance = 60;
+                    double r = distance;
+                    double theta = 0;
+                    int p = 8;
+                    int d = 4;
 
+                    Random random = new Random();
+                    for (int i = 1; i <= k; i++) {
+                        name = i;
+                        y = centerY + r * Math.sin(theta);
+                        x = centerX + r * Math.cos(theta);
+
+                        if (x <= 35 || x >= this.drawingPane.getWidth() - 35 || y <= 35 || y >= this.drawingPane.getHeight() - 35) {
+                            x = random.nextInt(35, (int) this.drawingPane.getWidth() - 35);
+                            y = random.nextInt(35, (int) this.drawingPane.getHeight() - 35);
+                        }
+                        else {
+                            theta+= Math.PI / d;
+                            if (i % p == 0) {
+                                p*=3;
+                                d*=2;
+                                r+=distance;
+                            }
+                        }
+
+                        nodeCounter++;
+                        Vertex node = new Vertex(x, y, name);
+                        node.makeDraggable(true);
+                        this.graph.getVertexes().add(node);
+                        drawingPane.getChildren().add(node);
+                    }
+                }
                 for (int i = 0; i < k; i++) {
                     for (int j = i; j < k; j++) {
                         if (this.graph.getMatrix()[i][j] == 1) {
@@ -128,6 +166,7 @@ public class GraphController implements Initializable {
                     }
                 }
 
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -136,39 +175,23 @@ public class GraphController implements Initializable {
         graph.getEdges().forEach(Edge::resetStyle);
     }
 
-    private Edge createEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
-        Edge edge = Drawer.edgeFromVertexToVertex(n1, n2, pane);
-        n1.setStartEdge(edge);
-        n2.setEndEdgeList(edge);
-        objectList.add(edge);
-        return edge;
-    }
-
     @FXML
     protected void saveFileAs() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Сохранить");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Текстовый документ", "*.txt"));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Граф", "*.graph"));
 
         File file = fileChooser.showSaveDialog(new Stage());
 
         if (file != null && !this.drawingPane.getChildren().isEmpty()) {
 
             try {
-                BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_8);
+                BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_16);
                 writer.write(this.graph.getSize() + "\n");
 
                 int[][] matrix = this.graph.getMatrix();
 
                 for (var r : matrix) {
-                    writer.write(Arrays.stream(r).mapToObj(String::valueOf).collect(Collectors.joining(" ")) + "\n");
-                }
-
-                writer.write(this.graph.getCapacity() + "\n");
-
-                int[][] hiddenMatrix = this.graph.getHiddenAdjacencyMatrix();
-
-                for (var r : hiddenMatrix) {
                     writer.write(Arrays.stream(r).mapToObj(String::valueOf).collect(Collectors.joining(" ")) + "\n");
                 }
 
@@ -376,6 +399,14 @@ public class GraphController implements Initializable {
             }
         }
 
+    }
+
+    private Edge createEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
+        Edge edge = Drawer.edgeFromVertexToVertex(n1, n2, pane);
+        n1.setStartEdge(edge);
+        n2.setEndEdgeList(edge);
+        objectList.add(edge);
+        return edge;
     }
 
     private boolean inDrawableRange(double x, double y, Pane pane) {
