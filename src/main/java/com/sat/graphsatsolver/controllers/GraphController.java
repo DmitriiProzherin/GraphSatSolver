@@ -75,7 +75,7 @@ public class GraphController implements Initializable {
         File file = fileChooser.showOpenDialog(new Stage());
 
         if (file != null) {
-            try (BufferedReader br = Files.newBufferedReader(file.toPath(), StandardCharsets.UTF_16)) {
+            try (BufferedReader br = Files.newBufferedReader(file.toPath())) {
                 this.edgeCreationButton.setSelected(false);
                 this.nodeCreationButton.setSelected(false);
 
@@ -186,7 +186,7 @@ public class GraphController implements Initializable {
         if (file != null && !this.drawingPane.getChildren().isEmpty()) {
 
             try {
-                BufferedWriter writer = Files.newBufferedWriter(file.toPath(), StandardCharsets.UTF_16);
+                BufferedWriter writer = Files.newBufferedWriter(file.toPath());
                 writer.write(this.graph.getSize() + "\n");
 
                 int[][] matrix = this.graph.getMatrix();
