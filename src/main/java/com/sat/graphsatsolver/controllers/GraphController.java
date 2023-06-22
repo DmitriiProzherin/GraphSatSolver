@@ -365,11 +365,13 @@ public class GraphController implements Initializable {
 
                         graph.getEdges().forEach(e -> {
                             if (e.getFrom().equals(g1) && e.getTo().equals(g2) || e.getTo().equals(g1) && e.getFrom().equals(g2))
-                                e.setStroke(EDGE_HAMILTONIAN_PATH_COLOR);
+                            {
+                                e.setStroke(HAMILTONIAN_PATH_COLOR);
+                                e.setOpacity(OPACITY_ACTIVE);
+                            }
                         });
-
-                        graph.getVertexes().forEach(n -> n.getCircle().setStroke(EDGE_HAMILTONIAN_PATH_COLOR));
                     }
+                    graph.getVertexes().get(resultMap.get(1) - 1).getCircle().setFill(HAMILTONIAN_PATH_COLOR);
                 }
             }
         }

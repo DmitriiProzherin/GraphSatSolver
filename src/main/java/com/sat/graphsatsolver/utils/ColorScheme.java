@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 
 public class ColorScheme {
     public static final Color EDGE_DEFAULT_COLOR = Color.rgb(100, 100, 100);
-    public static final Color EDGE_HAMILTONIAN_PATH_COLOR = Color.web("#FF3D00");
+    public static final Color HAMILTONIAN_PATH_COLOR = Color.web("#FF3D00");
+    public static final Color HAMILTONIAN_PATH_VERTEX_START_END_COLOR = Color.web("#FFD600");
     public static final Color VERTEX_CIRCLE_STROKE_SELECTED = Color.web("#004D40");
     public static final Color VERTEX_CIRCLE_STROKE_DEFAULT = Color.WHEAT;
 
