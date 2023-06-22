@@ -10,7 +10,6 @@ public class DIMACSConverter {
         int numVertices = matrix.length;
         int numVariables = numVertices * numberOfColors;
 
-        // Step 2: Generate Variables
         Map<String, Integer> variables = new HashMap<>();
         int varId = 1;
         for (int vertex = 1; vertex <= numVertices; vertex++) {
@@ -20,10 +19,8 @@ public class DIMACSConverter {
             }
         }
 
-        // Step 3: Generate Clauses
         List<List<Integer>> clauses = new ArrayList<>();
 
-        // a. At least one color per vertex
         for (int vertex = 1; vertex <= numVertices; vertex++) {
             List<Integer> clause = new ArrayList<>();
             for (int color = 1; color <= numberOfColors; color++) {
@@ -32,7 +29,6 @@ public class DIMACSConverter {
             clauses.add(clause);
         }
 
-        // b. At most one color per vertex
         for (int vertex = 1; vertex <= numVertices; vertex++) {
             for (int color1 = 1; color1 < numberOfColors; color1++) {
                 for (int color2 = color1 + 1; color2 <= numberOfColors; color2++) {
@@ -44,7 +40,6 @@ public class DIMACSConverter {
             }
         }
 
-        // c. Adjacent vertices have different colors
         for (int i = 1; i < numVertices; i++) {
             for (int j = i + 1; j <= numVertices; j++) {
                 if (matrix[i - 1][j - 1] == 1) {  // If there's an edge between vertices i and j
@@ -58,7 +53,6 @@ public class DIMACSConverter {
             }
         }
 
-        // Step 4: Write DIMACS Input
         StringBuilder dimacs = new StringBuilder();
         dimacs.append("p cnf ").append(numVariables).append(" ").append(clauses.size()).append("\n");
         for (List<Integer> clause : clauses) {
