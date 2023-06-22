@@ -3,7 +3,7 @@ package com.sat.graphsatsolver.gui;
 import java.util.ArrayList;
 
 public class Graph {
-    private ArrayList<GraphNode> nodes;
+    private ArrayList<Vertex> nodes;
 
     private int size;
 
@@ -19,7 +19,7 @@ public class Graph {
         hiddenAdjacencyMatrix = new int[capacity][capacity];
     }
 
-    public void add(GraphNode node){
+    public void add(Vertex node){
         nodes.add(node);
         size++;
 
@@ -90,7 +90,7 @@ public class Graph {
         nodes.clear();
     }
 
-    public ArrayList<GraphNode> getNodes(){
+    public ArrayList<Vertex> getNodes(){
         return nodes;
     }
 

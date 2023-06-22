@@ -28,8 +28,8 @@ import java.util.stream.Collectors;
 
 public class GraphController implements Initializable {
 
-    private final List<GraphNode> selectedNodeList = new LinkedList<>();
-    private final List<GraphNode> nodeList = new LinkedList<>();
+    private final List<Vertex> selectedNodeList = new LinkedList<>();
+    private final List<Vertex> nodeList = new LinkedList<>();
     private Graph graph = new Graph();
     private List<Object> objectsOnPane = new LinkedList<>();
     private int colorsAmount;
@@ -114,7 +114,7 @@ public class GraphController implements Initializable {
                     y = Double.parseDouble(arr[2]);
 
                     nodeCounter++;
-                    GraphNode node = new GraphNode(x, y, name);
+                    Vertex node = new Vertex(x, y, name);
                     node.makeDraggable(true);
                     this.graph.getNodes().add(node);
                     drawingPane.getChildren().add(node);
@@ -134,8 +134,8 @@ public class GraphController implements Initializable {
         }
     }
 
-    private void addEdge(GraphNode n1, GraphNode n2, Pane pane, List<Object> objectList){
-        Line line = Drawer.lineFromNodeToNode(n1, n2, pane);
+    private void addEdge(Vertex n1, Vertex n2, Pane pane, List<Object> objectList) {
+        Edge line = Drawer.edgeFromVertexToVertex(n1, n2, pane);
         n1.setStartEdge(line);
         n2.setEndEdgeList(line);
         objectList.add(line);
@@ -205,43 +205,42 @@ public class GraphController implements Initializable {
         double x = event.getX();
         double y = event.getY();
 
-        if (x < GraphNode.NODE_RADIUS) x = GraphNode.NODE_RADIUS;
-        else if (x > drawingPane.getWidth() - GraphNode.NODE_RADIUS - 1) x = drawingPane.getWidth() - GraphNode.NODE_RADIUS - 1;
+        if (x < Vertex.NODE_RADIUS) x = Vertex.NODE_RADIUS;
+        else if (x > drawingPane.getWidth() - Vertex.NODE_RADIUS - 1)
+            x = drawingPane.getWidth() - Vertex.NODE_RADIUS - 1;
 
-        if (y < GraphNode.NODE_RADIUS) y = GraphNode.NODE_RADIUS;
-        else if (y > drawingPane.getHeight() - GraphNode.NODE_RADIUS - 1) y = drawingPane.getHeight() - GraphNode.NODE_RADIUS - 1;
+        if (y < Vertex.NODE_RADIUS) y = Vertex.NODE_RADIUS;
+        else if (y > drawingPane.getHeight() - Vertex.NODE_RADIUS - 1)
+            y = drawingPane.getHeight() - Vertex.NODE_RADIUS - 1;
 
         if (inDrawableRange(x, y, drawingPane)) {
             if (nodeCreationButton.isSelected()) {
                 nodeCounter++;
-                GraphNode node = new GraphNode(x, y, nodeCounter);
+                Vertex node = new Vertex(x, y, nodeCounter);
                 node.toBack();
                 this.nodeList.add(node);
                 graph.add(node);
                 drawingPane.getChildren().add(node);
                 objectsOnPane.add(node);
-            }
-            else if (edgeCreationButton.isSelected() && event.getTarget() instanceof GraphNode node) {
+            } else if (edgeCreationButton.isSelected() && event.getTarget() instanceof Vertex node) {
                 if (selectedNodeList.size() == 0) {
                     selectedNodeList.add(node);
                     node.select();
-                }
-                else if (!node.equals(selectedNodeList.get(0))) {
+                } else if (!node.equals(selectedNodeList.get(0))) {
                     selectedNodeList.add(node);
-                    GraphNode n1 = selectedNodeList.get(0);
-                    GraphNode n2 = selectedNodeList.get(1);
+                    Vertex n1 = selectedNodeList.get(0);
+                    Vertex n2 = selectedNodeList.get(1);
 
-                    boolean edgeExists = this.graph.getMatrix()[n1.getDesignation()-1][n2.getDesignation()-1] == 1;
+                    boolean edgeExists = this.graph.getMatrix()[n1.getDesignation() - 1][n2.getDesignation() - 1] == 1;
 
                     if (!edgeExists) {
                         addEdge(n1, n2, drawingPane, objectsOnPane);
                         graph.setEdge(selectedNodeList.get(0).getDesignation(), selectedNodeList.get(1).getDesignation());
                     }
 
-                    selectedNodeList.forEach(GraphNode::unselect);
+                    selectedNodeList.forEach(Vertex::unselect);
                     selectedNodeList.clear();
-                }
-                else {
+                } else {
                     selectedNodeList.clear();
                     node.unselect();
                 }
@@ -257,8 +256,8 @@ public class GraphController implements Initializable {
             Object element = objectsOnPane.get(objectsOnPane.size() - 1);
             objectsOnPane.remove(element);
 
-            if (element instanceof Line line) this.drawingPane.getChildren().remove(line);
-            else if (element instanceof GraphNode node) {
+            if (element instanceof Edge line) this.drawingPane.getChildren().remove(line);
+            else if (element instanceof Vertex node) {
                 nodeCounter--;
                 this.drawingPane.getChildren().remove(node);
             }
@@ -281,7 +280,7 @@ public class GraphController implements Initializable {
 
     @FXML
     protected void colorsToDefault() {
-        this.graph.getNodes().forEach(GraphNode::resetStyle);
+        this.graph.getNodes().forEach(Vertex::resetStyle);
     }
 
     @FXML
@@ -299,6 +298,8 @@ public class GraphController implements Initializable {
     @FXML
     protected void generateCnf() {
         this.satSolverOutTextArea.clear();
+        this.nodeCreationButton.setSelected(false);
+        this.edgeCreationButton.setSelected(false);
 
         if ("Раскраска графа".equalsIgnoreCase(problemChoiceBox.getValue())) {
             currentProblem = Problem.GRAPH_COLORING;
@@ -326,9 +327,10 @@ public class GraphController implements Initializable {
         String result = dpll.result();
         satSolverOutTextArea.setText(String.join("\n", result.split(" ")));
 
-        switch (currentProblem) {
-            case GRAPH_COLORING -> {
-                if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
+        if (!result.equalsIgnoreCase("UNSAT") && !result.equals("".trim())) {
+            switch (currentProblem) {
+                case GRAPH_COLORING -> {
+
                     this.colorMap = createColorMap(colorsAmount);
                     List<Integer> out = Arrays.stream(result.split(" "))
                             .map(Integer::parseInt)
@@ -345,9 +347,36 @@ public class GraphController implements Initializable {
                         i++;
                     }
                 }
-            }
-            case HAMILTONIAN_CYCLE_PATH -> {
-                System.out.println("Строю путь");
+                case HAMILTONIAN_CYCLE_PATH -> {
+                    int[] out = Arrays.stream(result.split(" "))
+                            .mapToInt(Integer::parseInt)
+                            .toArray();
+
+                    HashMap<Integer, Integer> resultMap = new HashMap<>();
+
+                    for (int j : out) {
+                        if (j > 0) {
+                            int temp = j % graph.getSize();
+                            resultMap.put(temp == 0 ? graph.getSize() : temp, (j - 1) / graph.getSize() + 1);
+                        }
+                    }
+
+                    for (int i = 1; i <= graph.getSize() - 1; i++) {
+                        Vertex g1 = graph.getNodes().get(resultMap.get(i) - 1);
+                        Vertex g2 = graph.getNodes().get(resultMap.get(i+1) - 1);
+
+
+
+
+                        Edge line = Drawer.edgeFromVertexToVertex(g1,g2, this.drawingPane);
+                        line.setStroke(Color.RED);
+                        line.setStrokeWidth(6);
+
+
+                        g1.setFill(Color.RED);
+                    }
+                    graph.getNodes().get(resultMap.get(graph.getSize()) - 1).setFill(Color.RED);
+                }
             }
         }
 
@@ -395,35 +424,33 @@ public class GraphController implements Initializable {
 
         this.nodeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
-                if (c instanceof GraphNode) {
-                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_SELECTED));
-                    ((GraphNode) c).makeDraggable(false);
+                if (c instanceof Vertex) {
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_SELECTED));
+                    ((Vertex) c).makeDraggable(false);
                 }
             });
-            else if (!edgeCreationButton.isSelected()) drawingPane.getChildren().forEach(c ->{
-                if (c instanceof  GraphNode) ((GraphNode) c).makeDraggable(true);
+            else if (!edgeCreationButton.isSelected()) drawingPane.getChildren().forEach(c -> {
+                if (c instanceof Vertex) ((Vertex) c).makeDraggable(true);
             });
         });
 
         this.edgeCreationButton.selectedProperty().addListener((observableValue, oldValue, newValue) -> {
             if (newValue) drawingPane.getChildren().forEach(c -> {
-                if (c instanceof GraphNode) {
-                    ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_UNSELECTED));
-                    ((GraphNode) c).makeDraggable(false);
+                if (c instanceof Vertex) {
+                    ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_UNSELECTED));
+                    ((Vertex) c).makeDraggable(false);
 
-                }
-                else if (c instanceof Line) {
+                } else if (c instanceof Line) {
                     ((Line) c).setStroke(EDGE_SELECTED_COLOR);
                 }
             });
             else {
                 drawingPane.getChildren().forEach(c -> {
-                    if (c instanceof GraphNode) {
-                        ((GraphNode) c).getChildren().forEach(n -> n.setOpacity(GraphNode.OPACITY_SELECTED));
-                        if (!nodeCreationButton.isSelected()) ((GraphNode) c).makeDraggable(true);
+                    if (c instanceof Vertex) {
+                        ((Vertex) c).getChildren().forEach(n -> n.setOpacity(Vertex.OPACITY_SELECTED));
+                        if (!nodeCreationButton.isSelected()) ((Vertex) c).makeDraggable(true);
 
-                    }
-                    else if (c instanceof Line) {
+                    } else if (c instanceof Line) {
                         ((Line) c).setStroke(Color.rgb(180, 180, 180));
                     }
                 });

@@ -9,7 +9,7 @@ import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 
-public class GraphNode extends StackPane {
+public class Vertex extends StackPane {
 
     private final Circle circle;
     private final Label label;
@@ -35,7 +35,7 @@ public class GraphNode extends StackPane {
     private ArrayList<Line> startEdgeList;
     private ArrayList<Line> endEdgeList;
 
-    public GraphNode(double x, double y, int designation) {
+    public Vertex(double x, double y, int designation) {
         this.designation = designation;
         this.startEdgeList = new ArrayList<>();
         this.endEdgeList = new ArrayList<>();
@@ -100,11 +100,11 @@ public class GraphNode extends StackPane {
     }
 
 
-    public void setStartEdge(Line edge) {
+    public void setStartEdge(Edge edge) {
         this.startEdgeList.add(edge);
     }
 
-    public void setEndEdgeList(Line edge) {
+    public void setEndEdgeList(Edge edge) {
         this.endEdgeList.add(edge);
     }
 
@@ -198,7 +198,7 @@ public class GraphNode extends StackPane {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        GraphNode node = (GraphNode) o;
+        Vertex node = (Vertex) o;
 
         return designation == node.designation;
     }
