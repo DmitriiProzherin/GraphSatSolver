@@ -55,7 +55,7 @@
                   <ChoiceBox fx:id="problemChoiceBox" focusTraversable="false" prefHeight="8.0" prefWidth="152.0" />
                   <Separator focusTraversable="false" prefWidth="200.0" visible="false" />
                   <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="161.0" text="Количество цветов" textAlignment="CENTER" />
-                  <HBox prefHeight="16.0" prefWidth="152.0">
+                  <HBox fx:id="colorsBox" prefHeight="16.0" prefWidth="152.0">
                      <children>
                         <Button fx:id="decrementColorsAmountButton" focusTraversable="false" mnemonicParsing="false" onAction="#decrementColorsAmount" prefHeight="25.0" prefWidth="120.0" text="-1" />
                         <TextField fx:id="colorsAmountTextField" alignment="CENTER" focusTraversable="false" prefHeight="25.0" prefWidth="120.0" text="1" />

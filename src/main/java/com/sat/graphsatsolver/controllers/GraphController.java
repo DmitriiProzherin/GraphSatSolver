@@ -10,6 +10,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
@@ -51,6 +52,8 @@ public class GraphController implements Initializable {
     public Button colorsToDefaultButton;
     @FXML
     public ChoiceBox<String> problemChoiceBox;
+    @FXML
+    public HBox colorsBox;
     @FXML
     public TextField colorsAmountTextField;
     @FXML
@@ -493,5 +496,9 @@ public class GraphController implements Initializable {
             }
         });
 
+        this.problemChoiceBox.setOnAction(event -> {
+            if ("Раскраска графа".equalsIgnoreCase(this.problemChoiceBox.getValue())) this.colorsBox.setDisable(false);
+            else if ("Гамильтонов путь".equalsIgnoreCase(this.problemChoiceBox.getValue())) this.colorsBox.setDisable(true);
+        });
     }
 }
