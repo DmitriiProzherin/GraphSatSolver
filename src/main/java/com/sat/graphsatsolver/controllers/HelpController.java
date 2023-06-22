@@ -14,6 +14,16 @@ public class HelpController implements Initializable {
     @FXML
     TreeView<String> treeView;
 
+    @FXML
+    protected void selectItem() {
+
+        TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
+
+        if(item != null) {
+            System.out.println(item.getValue());
+        }
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
