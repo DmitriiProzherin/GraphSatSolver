@@ -48,8 +48,8 @@ public class Text {
 
     // DPLL
     public static final String DPLL_TITLE = "Алгоритм DPLL";
-    public static final String DPLL_IO = "Входные данные: Набор дизъюнкт формулы Φ.\n" +
-            "Выходные данные: Значение истинности";
+    public static final String DPLL_IO = "Входные данные: Φ - формула (КНФ).\n" +
+            "Выходные данные: SAT (формула выполнима) или UNSAT (невыполнима)";
     public static final String DPLL_DESCRIPTION = "function DPLL(Φ)\n" +
             "   если Φ - это набор выполняющихся дизъюнкт\n" +
             "       тогда return true;\n" +
@@ -65,10 +65,26 @@ public class Text {
 
     // CDCL
     public static final String CDCL_TITLE = "Алгоритм CDCL";
-    public static final String CDCL_DESCRIPTION = "   Гамильтонов путь - это простой путь (без петель), " +
-            "проходящий через каждую вершину графа ровно один раз.\n" +
-            "   Задача определения, существует ли гамильтонов путь в заданном графе, в общем случае, является NP-полной.";
-
-
+    public static final String CDCL_IO = "Входные данные:\n" +
+            "   φ - формула (КНФ);\n" +
+            "   ν - отображение значений переменных в виде множества пар.\n" +
+            "Выходные данные: SAT (формула выполнима) или UNSAT (невыполнима)";
+    public static final String CDCL_DESCRIPTION ="Eсли UnitPropagationConflict(φ, ν)\n" +
+            "   то возврат UNSAT\n" +
+            "L := 0\n" +
+            "пока NotAllVariablesAssigned(φ, ν)\n" +
+            "  (x, v) := PickBranchingVariable(φ, ν)\n" +
+            "  L := L + 1\n" +
+            "  ν := ν ∪ {(x, v)}\n" +
+            "  если UnitPropagationConflict(φ, ν)\n" +
+            "  то\n" +
+            "     β := ConflictAnalysis(φ, ν)\n" +
+            "     если β < 0\n" +
+            "     то\n" +
+            "        возврат UNSAT\n" +
+            "     иначе\n" +
+            "       Backtrack(φ, ν, β)\n" +
+            "       L := β\n" +
+            "возврат SAT";
 
 }

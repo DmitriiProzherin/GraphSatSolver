@@ -11,7 +11,7 @@ public class LabelFactory {
     public static Label createHelpLabel(String text, boolean title){
         Label label = new Label();
         label.setWrapText(true);
-        label.setPrefWidth(270);
+        label.setPrefWidth(290);
         label.setText(text);
         if (!title) {
             label.setPadding(new Insets(3,0,10, 0));

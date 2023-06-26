@@ -37,6 +37,7 @@ public class HelpController implements Initializable {
                 case "Раскраска графа" -> setContentGraphColoring(root);
                 case "Гамильтонов путь" -> setContentHp(root);
                 case "DPLL" -> setContentDpll(root);
+                case "CDCL" -> setContentCdcl(root);
             }
         }
     }
@@ -60,44 +61,52 @@ public class HelpController implements Initializable {
     private void setContentSat(VBox root){
         root.getChildren().clear();
 
-        Label satTitleLabel = LabelFactory.createHelpLabel(SAT_TITLE, true);
-        Label satdescriptionLabel = LabelFactory.createHelpLabel(SAT_DESCRIPTION, false);
+        Label l1 = LabelFactory.createHelpLabel(SAT_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(SAT_DESCRIPTION, false);
 
-        root.getChildren().addAll(satTitleLabel, satdescriptionLabel);
+        root.getChildren().addAll(l1, l2);
 
     }
 
     private void setContentGraphColoring(VBox root){
         root.getChildren().clear();
 
-        Label coloringTitleLabel = LabelFactory.createHelpLabel(GRAPH_COLORING_TITLE, true);
-        Label coloringdescriptionLabel = LabelFactory.createHelpLabel(GRAPH_COLORING_DESCRIPTION, false);
+        Label l1 = LabelFactory.createHelpLabel(GRAPH_COLORING_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(GRAPH_COLORING_DESCRIPTION, false);
 
-        root.getChildren().addAll(coloringTitleLabel, coloringdescriptionLabel);
+        root.getChildren().addAll(l1, l2);
 
     }
 
     private void setContentHp(VBox root){
         root.getChildren().clear();
 
-        Label coloringTitleLabel = LabelFactory.createHelpLabel(HP_TITLE, true);
-        Label coloringdescriptionLabel = LabelFactory.createHelpLabel(HP_DESCRIPTION, false);
+        Label l1 = LabelFactory.createHelpLabel(HP_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(HP_DESCRIPTION, false);
 
-        root.getChildren().addAll(coloringTitleLabel, coloringdescriptionLabel);
+        root.getChildren().addAll(l1, l2);
 
     }
 
     private void setContentDpll(VBox root){
         root.getChildren().clear();
 
-        Label dpllTitleLabel = LabelFactory.createHelpLabel(DPLL_TITLE, true);
+        Label l1 = LabelFactory.createHelpLabel(DPLL_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(DPLL_IO, false);
+        Label l3 = LabelFactory.createHelpLabel(DPLL_DESCRIPTION, false);
 
-        Label dpllIOLabel = LabelFactory.createHelpLabel(DPLL_IO, false);
+        root.getChildren().addAll(l1, l2, l3);
 
-        Label dpllDescriptionLabel = LabelFactory.createHelpLabel(DPLL_DESCRIPTION, false);
-        dpllDescriptionLabel.setStyle("-fx-fill: red");
+    }
 
-        root.getChildren().addAll(dpllTitleLabel, dpllIOLabel, dpllDescriptionLabel);
+    private void setContentCdcl(VBox root){
+        root.getChildren().clear();
+
+        Label l1 = LabelFactory.createHelpLabel(CDCL_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(CDCL_IO, false);
+        Label l3 = LabelFactory.createHelpLabel(CDCL_DESCRIPTION, false);
+
+        root.getChildren().addAll(l1, l2, l3);
 
     }
 
