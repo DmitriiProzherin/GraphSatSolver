@@ -28,7 +28,7 @@ public class HelpController implements Initializable {
             root.setPadding(new Insets(10));
             mainContextPane.setContent(root);
             switch (item.getValue()) {
-                case "КНФ" -> setContentCnf(root);
+                case "КНФ и DIMACS" -> setContentCnf(root);
                 case "Задача SAT" -> setContentSat(root);
                 case "Раскраска графа" -> setContentGraphColoring(root);
                 case "Гамильтонов путь" -> setContentHp(root);
@@ -37,7 +37,7 @@ public class HelpController implements Initializable {
                 case "Создание графа" -> setContentGraphCreation(root);
                 case "Сохранение/загрузка графа" -> setContentSaveLoadGraph(root);
                 case "Решение задачи раскраски" -> setContentGraphColoringSolving(root);
-                case "Решение задачи Гамильтонова пути" -> setContentHpSolving(root);
+                case "Решение задачи гамильтонова пути" -> setContentHpSolving(root);
                 case "DPLL-солвер" -> setContentDpllSolving(root);
             }
         }
@@ -135,28 +135,31 @@ public class HelpController implements Initializable {
 
     }
 
-    private void setContentDpllSolving(VBox root) {
+    private void setContentGraphColoringSolving(VBox root) {
         root.getChildren().clear();
 
-        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+        Label l1 = LabelFactory.createHelpLabel(SOLVING_GRAPH_COLORING_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(SOLVING_GRAPH_COLORING_DESCRIPTION, false);
 
-        root.getChildren().add(l1);
+        root.getChildren().addAll(l1, l2);
     }
 
     private void setContentHpSolving(VBox root) {
         root.getChildren().clear();
 
-        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+        Label l1 = LabelFactory.createHelpLabel(SOLVING_HP_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(SOLVING_HP_DESCRIPTION, false);
 
-        root.getChildren().add(l1);
+        root.getChildren().addAll(l1, l2);
     }
 
-    private void setContentGraphColoringSolving(VBox root) {
+    private void setContentDpllSolving(VBox root) {
         root.getChildren().clear();
 
-        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+        Label l1 = LabelFactory.createHelpLabel(SOLVING_SAT_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(SOLVING_SAT_DESCRIPTION, false);
 
-        root.getChildren().add(l1);
+        root.getChildren().addAll(l1, l2);
     }
 
     @Override
@@ -167,7 +170,7 @@ public class HelpController implements Initializable {
         TreeItem<String> branchItem1 = new TreeItem<>("Алгоритмы");
         TreeItem<String> branchItem2 = new TreeItem<>("О программе");
 
-        TreeItem<String> leafItem1_1 = new TreeItem<>("КНФ");
+        TreeItem<String> leafItem1_1 = new TreeItem<>("КНФ и DIMACS");
         TreeItem<String> leafItem1_2 = new TreeItem<>("Задача SAT");
         TreeItem<String> leafItem1_3 = new TreeItem<>("Раскраска графа");
         TreeItem<String> leafItem1_4 = new TreeItem<>("Гамильтонов путь");
@@ -177,7 +180,7 @@ public class HelpController implements Initializable {
         TreeItem<String> leafItem2_1 = new TreeItem<>("Создание графа");
         TreeItem<String> leafItem2_2 = new TreeItem<>("Сохранение/загрузка графа");
         TreeItem<String> leafItem2_3 = new TreeItem<>("Решение задачи раскраски");
-        TreeItem<String> leafItem2_4 = new TreeItem<>("Решение задачи Гамильтонова пути");
+        TreeItem<String> leafItem2_4 = new TreeItem<>("Решение задачи гамильтонова пути");
         TreeItem<String> leafItem2_5 = new TreeItem<>("DPLL-солвер");
 
         branchItem1.getChildren().addAll(leafItem1_1, leafItem1_2, leafItem1_3, leafItem1_4, leafItem1_5, leafItem1_6);
