@@ -14,10 +14,10 @@ public class LabelFactory {
         label.setPrefWidth(260);
         label.setText(text);
         if (!title) {
-            label.setPadding(new Insets(3.5));
+            label.setPadding(new Insets(3,0,10, 0));
         }
         else {
-            label.setStyle("-fx-font-weight: bold;");
+            label.setStyle("-fx-font-weight: bold; -fx-font-size: 12");
         }
         return label;
     }

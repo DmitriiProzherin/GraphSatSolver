@@ -31,6 +31,7 @@ public class HelpController implements Initializable {
             switch (item.getValue()) {
                 case "КНФ" -> setContentCnf(root);
                 case "Задача SAT" -> setContentSat(root);
+                case "Раскраска графа" -> setContentGraphColoring(root);
             }
         }
     }
@@ -58,6 +59,16 @@ public class HelpController implements Initializable {
         Label satdescriptionLabel = LabelFactory.createHelpLabel(SAT_DESCRIPTION, false);
 
         root.getChildren().addAll(satTitleLabel, satdescriptionLabel);
+
+    }
+
+    private void setContentGraphColoring(VBox root){
+        root.getChildren().clear();
+
+        Label coloringTitleLabel = LabelFactory.createHelpLabel(GRAPH_COLORING_TITLE, true);
+        Label coloringdescriptionLabel = LabelFactory.createHelpLabel(GRAPH_COLORING_DESCRIPTION, false);
+
+        root.getChildren().addAll(coloringTitleLabel, coloringdescriptionLabel);
 
     }
 
