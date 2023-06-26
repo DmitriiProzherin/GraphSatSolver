@@ -19,14 +19,12 @@ public class HelpController implements Initializable {
     @FXML
     ScrollPane mainContextPane;
 
+    private VBox root = new VBox();
     @FXML
     protected void selectItem() {
-
         TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
+
         if (item != null) {
-            VBox root = new VBox();
-            root.setPadding(new Insets(10));
-            mainContextPane.setContent(root);
             switch (item.getValue()) {
                 case "КНФ и DIMACS" -> setContentCnf(root);
                 case "Задача SAT" -> setContentSat(root);
@@ -39,6 +37,7 @@ public class HelpController implements Initializable {
                 case "Решение задачи раскраски" -> setContentGraphColoringSolving(root);
                 case "Решение задачи гамильтонова пути" -> setContentHpSolving(root);
                 case "DPLL-солвер" -> setContentDpllSolving(root);
+                default -> setContentDefault(root);
             }
         }
     }
@@ -162,6 +161,15 @@ public class HelpController implements Initializable {
         root.getChildren().addAll(l1, l2);
     }
 
+    private void setContentDefault(VBox root) {
+        root.getChildren().clear();
+
+        Label l1 = LabelFactory.createHelpLabel(DEFAULT_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(DEFAULT_DESCRIPTION, false);
+
+        root.getChildren().addAll(l1, l2);
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -187,6 +195,11 @@ public class HelpController implements Initializable {
         branchItem2.getChildren().addAll(leafItem2_1, leafItem2_2, leafItem2_3, leafItem2_4, leafItem2_5);
 
         rootItem.getChildren().addAll(branchItem1, branchItem2);
+
+
+        root.setPadding(new Insets(10));
+        setContentDefault(root);
+        mainContextPane.setContent(root);
 
         treeView.setShowRoot(false);
         treeView.setRoot(rootItem);
