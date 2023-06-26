@@ -13,6 +13,7 @@ public class LabelFactory {
         label.setWrapText(true);
         label.setPrefWidth(290);
         label.setText(text);
+        label.setFocusTraversable(false);
         if (!title) {
             label.setPadding(new Insets(3,0,10, 0));
         }

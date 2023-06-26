@@ -198,10 +198,13 @@ public class HelpController implements Initializable {
 
 
         root.setPadding(new Insets(10));
+        root.setFocusTraversable(false);
+        mainContextPane.setFocusTraversable(false);
         setContentDefault(root);
         mainContextPane.setContent(root);
 
         treeView.setShowRoot(false);
+        treeView.setFocusTraversable(false);
         treeView.setRoot(rootItem);
     }
 }
