@@ -38,6 +38,11 @@ public class HelpController implements Initializable {
                 case "Гамильтонов путь" -> setContentHp(root);
                 case "DPLL" -> setContentDpll(root);
                 case "CDCL" -> setContentCdcl(root);
+                case "Создание графа" -> setContentGraphCreation(root);
+                case "Сохранение/загрузка графа" -> setContentSaveLoadGraph(root);
+                case "Решение задачи раскраски" -> setContentGraphColoringSolving(root);
+                case "Решение задачи Гамильтонова пути" -> setContentHpSolving(root);
+                case "DPLL-солвер" -> setContentDpllSolving(root);
             }
         }
     }
@@ -107,6 +112,31 @@ public class HelpController implements Initializable {
         Label l3 = LabelFactory.createHelpLabel(CDCL_DESCRIPTION, false);
 
         root.getChildren().addAll(l1, l2, l3);
+
+    }
+
+    private void setContentDpllSolving(VBox root) {
+        root.getChildren().clear();
+
+    }
+
+    private void setContentHpSolving(VBox root) {
+        root.getChildren().clear();
+
+    }
+
+    private void setContentGraphColoringSolving(VBox root) {
+        root.getChildren().clear();
+
+    }
+
+    private void setContentSaveLoadGraph(VBox root) {
+        root.getChildren().clear();
+
+    }
+
+    private void setContentGraphCreation(VBox root) {
+        root.getChildren().clear();
 
     }
 
