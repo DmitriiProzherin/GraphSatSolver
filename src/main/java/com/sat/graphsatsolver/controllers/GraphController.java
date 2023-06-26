@@ -285,16 +285,42 @@ public class GraphController implements Initializable {
     }
 
     @FXML
-    protected void drawingPaneRemoveLastNode() {
-
+    protected void cancelLastAction() {
         if (!objectsOnPane.isEmpty()) {
             Object element = objectsOnPane.get(objectsOnPane.size() - 1);
             objectsOnPane.remove(element);
 
-            if (element instanceof Edge line) this.drawingPane.getChildren().remove(line);
-            else if (element instanceof Vertex node) {
+            if (element instanceof Edge edge) {
+                var n1 = edge.getFrom();
+                var n2 = edge.getTo();
+                int i = n1.getDesignation() - 1;
+                int j = n2.getDesignation() - 1;
+
+                this.drawingPane.getChildren().remove(edge);
+                this.graph.getEdges().remove(edge);
+                this.graph.getAdjacencyMatrix()[i][j] = 0;
+                this.graph.getAdjacencyMatrix()[j][i] = 0;
+                this.graph.getHiddenAdjacencyMatrix()[i][j] = 0;
+                this.graph.getHiddenAdjacencyMatrix()[j][i] = 0;
+                n1.getStartEdgeList().remove(edge);
+                n2.getEndEdgeList().remove(edge);
+            }
+            else if (element instanceof Vertex vertex) {
                 vertexCounter--;
-                this.drawingPane.getChildren().remove(node);
+                this.drawingPane.getChildren().remove(vertex);
+                this.vertexList.remove(vertex);
+                this.selectedVertexList.remove(vertex);
+                this.graph.getVertexes().remove(vertex);
+
+                int j = vertex.getDesignation() - 1;
+                int l = this.graph.getHiddenAdjacencyMatrix().length;
+
+                for (int i = 0; i < l; i++) {
+                    this.graph.getHiddenAdjacencyMatrix()[i][j] = 0;
+                    this.graph.getHiddenAdjacencyMatrix()[j][i] = 0;
+                }
+
+                this.graph.setSize(this.graph.getSize()-1);
             }
 
         }

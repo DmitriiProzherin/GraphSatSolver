@@ -187,6 +187,22 @@ public class Vertex extends StackPane {
         this.circle.setFill(color);
     }
 
+    public ArrayList<Line> getStartEdgeList() {
+        return startEdgeList;
+    }
+
+    public void setStartEdgeList(ArrayList<Line> startEdgeList) {
+        this.startEdgeList = startEdgeList;
+    }
+
+    public ArrayList<Line> getEndEdgeList() {
+        return endEdgeList;
+    }
+
+    public void setEndEdgeList(ArrayList<Line> endEdgeList) {
+        this.endEdgeList = endEdgeList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

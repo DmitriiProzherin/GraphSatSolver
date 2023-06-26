@@ -46,7 +46,7 @@
                   <Separator prefWidth="200.0" />
                   <ToggleButton fx:id="edgeCreationButton" focusTraversable="false" mnemonicParsing="false" prefHeight="50.0" prefWidth="165.0" text="Ребро" />
                   <Separator prefWidth="200.0" />
-                  <Button fx:id="cancelButton" focusTraversable="false" mnemonicParsing="false" onAction="#drawingPaneRemoveLastNode" prefHeight="50.0" prefWidth="165.0" text="Отмена" />
+                  <Button fx:id="cancelButton" focusTraversable="false" mnemonicParsing="false" onAction="#cancelLastAction" prefHeight="50.0" prefWidth="165.0" text="Отмена" />
                   <Separator prefWidth="200.0" />
                   <Button fx:id="clearDrawingPaneButton" focusTraversable="false" mnemonicParsing="false" onAction="#clearDrawingPane" prefHeight="50.0" prefWidth="165.0" text="Очистить" />
                   <Separator prefWidth="200.0" />
