@@ -434,6 +434,7 @@ public class GraphController implements Initializable {
                         });
                     }
                     graph.getVertexes().get(resultMap.get(1) - 1).getCircle().setFill(HAMILTONIAN_PATH_COLOR);
+                    graph.getVertexes().get(resultMap.get(resultMap.size()) - 1).getCircle().setFill(HAMILTONIAN_PATH_COLOR);
                 }
             }
         }

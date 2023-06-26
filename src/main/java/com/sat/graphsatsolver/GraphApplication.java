@@ -20,6 +20,9 @@ public class GraphApplication extends Application {
         stage.getIcons().add(image);
         stage.setResizable(false);
         stage.setScene(scene);
+        stage.setOnCloseRequest(e -> {
+            System.exit(1);
+        });
         stage.show();
     }
 

@@ -7,8 +7,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -33,6 +36,7 @@ public class HelpController implements Initializable {
                 case "Задача SAT" -> setContentSat(root);
                 case "Раскраска графа" -> setContentGraphColoring(root);
                 case "Гамильтонов путь" -> setContentHp(root);
+                case "DPLL" -> setContentDpll(root);
             }
         }
     }
@@ -80,6 +84,20 @@ public class HelpController implements Initializable {
         Label coloringdescriptionLabel = LabelFactory.createHelpLabel(HP_DESCRIPTION, false);
 
         root.getChildren().addAll(coloringTitleLabel, coloringdescriptionLabel);
+
+    }
+
+    private void setContentDpll(VBox root){
+        root.getChildren().clear();
+
+        Label dpllTitleLabel = LabelFactory.createHelpLabel(DPLL_TITLE, true);
+
+        Label dpllIOLabel = LabelFactory.createHelpLabel(DPLL_IO, false);
+
+        Label dpllDescriptionLabel = LabelFactory.createHelpLabel(DPLL_DESCRIPTION, false);
+        dpllDescriptionLabel.setStyle("-fx-fill: red");
+
+        root.getChildren().addAll(dpllTitleLabel, dpllIOLabel, dpllDescriptionLabel);
 
     }
 
