@@ -27,6 +27,8 @@ public class Text {
 
     // Задача SAT
     public static final String SAT_TITLE = "Задача SAT:";
-    public static final String SAT_DESCRIPTION = "";
+    public static final String SAT_DESCRIPTION = "Задача заключается в следующем: можно ли назначить всем переменным, " +
+            "встречающимся в формуле, значения ложь и истина так, чтобы формула стала истинной.\n" +
+            "Программы, которые решают эту задачу называются решатели SAT или SAT-солверы. На вход подаётся формула в КНФ в формате DIMACS.";
 
 }
