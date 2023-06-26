@@ -1,10 +1,14 @@
 package com.sat.graphsatsolver.controllers;
 
+import com.sat.graphsatsolver.utils.LabelFactory;
+import static com.sat.graphsatsolver.utils.Text.*;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.geometry.Insets;
+import javafx.scene.control.*;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,15 +17,48 @@ public class HelpController implements Initializable {
 
     @FXML
     TreeView<String> treeView;
+    @FXML
+    ScrollPane mainContextPane;
 
     @FXML
     protected void selectItem() {
 
         TreeItem<String> item = treeView.getSelectionModel().getSelectedItem();
-
-        if(item != null) {
-            System.out.println(item.getValue());
+        if (item != null) {
+            VBox root = new VBox();
+            root.setPadding(new Insets(10));
+            mainContextPane.setContent(root);
+            switch (item.getValue()) {
+                case "КНФ" -> setContentCnf(root);
+                case "Задача SAT" -> setContentSat(root);
+            }
         }
+    }
+
+    private void setContentCnf(VBox root){
+        root.getChildren().clear();
+
+        Label cnfLabel = LabelFactory.createHelpLabel(CNF_TITLE, true);
+        Label cnfDescriptionLabel = LabelFactory.createHelpLabel(CNF_DESCRIPTION, false);
+        Label cnfExampleLabel = LabelFactory.createHelpLabel(CNF_EXAMPLE_TITLE, true);
+        Label cnfExampleDescriptionLabel = LabelFactory.createHelpLabel(CNF_EXAMPLE_DESCRIPTION, false);
+        Label dimacsLabel = LabelFactory.createHelpLabel(DIMACS_TITLE, true);
+        Label dimacsDescriptionLabel = LabelFactory.createHelpLabel(DIMACS_DESCRIPTION, false);
+        Label dimacsExampleLabel = LabelFactory.createHelpLabel(DIMACS_EXAMPLE_TITLE, true);
+        Label dimacsExampleDescriptionLabel = LabelFactory.createHelpLabel(DIMACS_EXAMPLE_DESCRIPTION, false);
+
+        root.getChildren().addAll(cnfLabel, cnfDescriptionLabel, cnfExampleLabel, cnfExampleDescriptionLabel,
+                dimacsLabel, dimacsDescriptionLabel, dimacsExampleLabel, dimacsExampleDescriptionLabel);
+    }
+
+    private void setContentSat(VBox root){
+        root.getChildren().clear();
+
+        Label satTitleLabel = LabelFactory.createHelpLabel(SAT_TITLE, true);
+        Label satdescriptionLabel = LabelFactory.createHelpLabel(SAT_DESCRIPTION, false);
+
+        root.getChildren().addAll(satTitleLabel, satdescriptionLabel);
+
     }
 
     @Override

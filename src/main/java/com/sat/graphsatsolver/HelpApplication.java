@@ -17,7 +17,7 @@ public class HelpApplication extends Application {
         stage.setTitle("Помощь");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("icons/app.png")).toString());
         stage.getIcons().add(image);
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.setScene(scene);
         stage.show();
     }
