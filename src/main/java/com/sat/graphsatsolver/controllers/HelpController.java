@@ -7,11 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -115,29 +111,52 @@ public class HelpController implements Initializable {
 
     }
 
-    private void setContentDpllSolving(VBox root) {
+    private void setContentGraphCreation(VBox root) {
         root.getChildren().clear();
 
-    }
+        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
 
-    private void setContentHpSolving(VBox root) {
-        root.getChildren().clear();
-
-    }
-
-    private void setContentGraphColoringSolving(VBox root) {
-        root.getChildren().clear();
-
+        root.getChildren().addAll(l1, l2);
     }
 
     private void setContentSaveLoadGraph(VBox root) {
         root.getChildren().clear();
 
+        Label l1 = LabelFactory.createHelpLabel(SAVE_TITLE, true);
+        Label l2 = LabelFactory.createHelpLabel(SAVE_DESCRIPTION, false);
+        Label l3 = LabelFactory.createHelpLabel(LOAD_TITLE, true);
+        Label l4 = LabelFactory.createHelpLabel(LOAD_DESCRIPTION, false);
+        Label l5 = LabelFactory.createHelpLabel(FILE_EXAMPLE_TITLE, true);
+        Label l6 = LabelFactory.createHelpLabel(FILE_EXAMPLE_1, false);
+        Label l7 = LabelFactory.createHelpLabel(FILE_EXAMPLE_2, false);
+
+        root.getChildren().addAll(l1, l2, l3, l4, l5, l6, l7);
+
     }
 
-    private void setContentGraphCreation(VBox root) {
+    private void setContentDpllSolving(VBox root) {
         root.getChildren().clear();
 
+        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+
+        root.getChildren().add(l1);
+    }
+
+    private void setContentHpSolving(VBox root) {
+        root.getChildren().clear();
+
+        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+
+        root.getChildren().add(l1);
+    }
+
+    private void setContentGraphColoringSolving(VBox root) {
+        root.getChildren().clear();
+
+        Label l1 = LabelFactory.createHelpLabel(GRAPH_CREATION_INFO, false);
+
+        root.getChildren().add(l1);
     }
 
     @Override
