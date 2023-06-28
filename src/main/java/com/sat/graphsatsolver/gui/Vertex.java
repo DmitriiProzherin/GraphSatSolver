@@ -139,8 +139,8 @@ public class Vertex extends StackPane {
                 double posX;
                 double posY;
 
-                double maxW = DRAWING_PANE_WIDTH - 2*NODE_RADIUS + 1;
-                double maxH = DRAWING_PANE_HEIGHT - 2*NODE_RADIUS + 1;
+                double maxW = DRAWING_PANE_WIDTH - 2*NODE_RADIUS;
+                double maxH = DRAWING_PANE_HEIGHT - 6*NODE_RADIUS - 11;
 
                 if (x < 1) posX = 1;
                 else posX = Math.min(x, maxW);

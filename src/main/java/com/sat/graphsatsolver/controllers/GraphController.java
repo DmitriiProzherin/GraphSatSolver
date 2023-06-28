@@ -253,7 +253,7 @@ public class GraphController implements Initializable {
 
         if (y < Vertex.NODE_RADIUS) y = Vertex.NODE_RADIUS;
         else if (y > drawingPane.getHeight() - Vertex.NODE_RADIUS - 1)
-            y = drawingPane.getHeight() - Vertex.NODE_RADIUS - 1;
+            y = drawingPane.getHeight() - Vertex.NODE_RADIUS - 2;
 
         if (inDrawableRange(x, y, drawingPane)) {
             if (vertexCreationButton.isSelected()) {
