@@ -36,17 +36,17 @@
                <children>
                   <VBox prefHeight="659.0" prefWidth="343.0">
                      <children>
-                        <Label alignment="CENTER" focusTraversable="false" minHeight="20.0" prefHeight="20.0" prefWidth="381.0" style="-fx-background-color: whitesmoke; -fx-border-color: grey; -fx-border-radius: 3; -fx-border-radius: 3;" text="КНФ (DIMACS)" textAlignment="CENTER" />
+                        <Label alignment="CENTER" focusTraversable="false" prefHeight="20.0" prefWidth="381.0" style="-fx-background-color: whitesmoke; -fx-border-color: grey; -fx-border-radius: 3; -fx-border-radius: 3;" text="КНФ (DIMACS)" textAlignment="CENTER" />
                         <Separator focusTraversable="false" minHeight="3.0" prefHeight="3.0" prefWidth="200.0" visible="false" />
-                        <TextArea fx:id="cnfTextArea" focusTraversable="false" minWidth="332.0" prefHeight="657.0" prefWidth="336.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
+                        <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="657.0" prefWidth="336.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
                      </children>
                   </VBox>
-                  <Separator focusTraversable="false" minWidth="3.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0" visible="false" />
+                  <Separator focusTraversable="false" minWidth="-Infinity" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0" visible="false" />
                   <VBox prefHeight="659.0" prefWidth="118.0">
                      <children>
-                        <Label alignment="CENTER" focusTraversable="false" minHeight="20.0" prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: whitesmoke; -fx-border-radius: 3; -fx-background-radius: 3; -fx-border-color: grey;" text="Результат" textAlignment="CENTER" />
+                        <Label alignment="CENTER" focusTraversable="false" prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: whitesmoke; -fx-border-radius: 3; -fx-background-radius: 3; -fx-border-color: grey;" text="Результат" textAlignment="CENTER" />
                         <Separator focusTraversable="false" minHeight="3.0" prefHeight="3.0" prefWidth="200.0" visible="false" />
-                        <TextArea fx:id="satOutputTextArea" focusTraversable="false" minWidth="96.0" prefHeight="650.0" prefWidth="139.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
+                        <TextArea fx:id="satOutputTextArea" focusTraversable="false" prefHeight="650.0" prefWidth="139.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
                      </children>
                   </VBox>
                </children>

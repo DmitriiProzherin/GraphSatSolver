@@ -38,7 +38,7 @@
             </Menu>
         </menus>
       </MenuBar>
-      <HBox layoutY="27.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="675.0" prefWidth="1000.0" style="-fx-padding: 20;">
+      <HBox fx:id="contentBox" layoutY="27.0" prefHeight="675.0" prefWidth="1000.0" style="-fx-padding: 20;">
          <children>
             <VBox prefHeight="573.0" prefWidth="153.0">
                <children>
@@ -73,16 +73,16 @@
                 <Button fx:id="satSolveButton" focusTraversable="false" mnemonicParsing="false" onAction="#solveSat" prefHeight="50.0" prefWidth="153.0" text="Решить (DPLL)" />
                </children>
             </VBox>
-            <Separator focusTraversable="false" minWidth="10.0" mouseTransparent="true" pickOnBounds="false" prefHeight="635.0" prefWidth="10.0" visible="false" />
-            <Pane fx:id="drawingPane" minWidth="507.0" onMouseClicked="#createGraphNode" prefHeight="635.0" prefWidth="507.0" style="-fx-border-color: grey; -fx-background-color: white; -fx-border-radius: 3; -fx-background-radius: 3;" />
-            <Separator focusTraversable="false" minWidth="10.0" prefHeight="635.0" prefWidth="10.0" visible="false" />
+            <Separator focusTraversable="false" orientation="VERTICAL" prefHeight="200.0" visible="false" />
+            <Pane fx:id="drawingPane" onMouseClicked="#createGraphNode" prefWidth="507.0" style="-fx-border-color: grey; -fx-background-color: white; -fx-border-radius: 3; -fx-background-radius: 3;" />
+            <Separator focusTraversable="false" orientation="VERTICAL" prefHeight="200.0" visible="false" />
             <VBox prefHeight="635.0" prefWidth="277.0">
                <children>
                   <HBox prefHeight="642.0" prefWidth="269.0">
                      <children>
                         <VBox prefHeight="635.0" prefWidth="193.0">
                            <children>
-                              <Label alignment="CENTER" focusTraversable="false" minHeight="20.0" prefHeight="17.0" prefWidth="188.0" style="-fx-background-color: whitesmoke; -fx-background-radius: 3; -fx-border-color: grey; -fx-border-radius: 3;" text="КНФ (DIMACS)" textAlignment="CENTER" />
+                              <Label alignment="CENTER" focusTraversable="false" prefHeight="17.0" prefWidth="188.0" style="-fx-background-color: whitesmoke; -fx-background-radius: 3; -fx-border-color: grey; -fx-border-radius: 3;" text="КНФ (DIMACS)" textAlignment="CENTER" />
                               <Separator focusTraversable="false" prefWidth="200.0" visible="false" />
                               <TextArea fx:id="cnfTextArea" editable="false" focusTraversable="false" pickOnBounds="false" prefHeight="635.0" prefWidth="151.0" style="-fx-background-radius: 3; -fx-border-radius: 3; -fx-border-color: grey;" />
                            </children>
@@ -90,7 +90,7 @@
                         <Separator minWidth="3.0" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0" visible="false" />
                         <VBox prefHeight="200.0" prefWidth="100.0">
                            <children>
-                              <Label alignment="CENTER" focusTraversable="false" minHeight="20.0" prefHeight="17.0" prefWidth="188.0" style="-fx-background-color: whitesmoke; -fx-background-radius: 3; -fx-border-radius: 3; -fx-border-color: grey;" text="Результат" textAlignment="CENTER" />
+                              <Label alignment="CENTER" focusTraversable="false" prefHeight="17.0" prefWidth="188.0" style="-fx-background-color: whitesmoke; -fx-background-radius: 3; -fx-border-radius: 3; -fx-border-color: grey;" text="Результат" textAlignment="CENTER" />
                               <Separator focusTraversable="false" prefWidth="200.0" visible="false" />
                               <TextArea fx:id="satSolverOutTextArea" editable="false" focusTraversable="false" pickOnBounds="false" prefHeight="635.0" prefWidth="196.0" style="-fx-background-radius: 3; -fx-border-radius: 3; -fx-border-color: grey;" />
                            </children>

@@ -27,8 +27,10 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sat.graphsatsolver.utils.ColorScheme.*;
+import static com.sat.graphsatsolver.utils.Properties.CONTENT_BOX_HEIGHT;
 
 public class GraphController implements Initializable {
+
 
     private final List<Vertex> selectedVertexList = new LinkedList<>();
     private final List<Vertex> vertexList = new LinkedList<>();
@@ -38,6 +40,8 @@ public class GraphController implements Initializable {
     private int vertexCounter;
     private Problem currentProblem;
 
+    @FXML
+    public HBox contentBox;
     @FXML
     public Pane drawingPane;
     @FXML
@@ -68,6 +72,8 @@ public class GraphController implements Initializable {
     public TextArea cnfTextArea;
     @FXML
     public TextArea satSolverOutTextArea;
+
+    public static double VERTEX_RADIUS;
 
     @FXML
     protected void loadFile() {
@@ -480,6 +486,10 @@ public class GraphController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        contentBox.setPrefHeight(CONTENT_BOX_HEIGHT);
+
+        VERTEX_RADIUS = contentBox.getPrefHeight() * 0.042;
+
         String[] problems = {"Раскраска графа", "Гамильтонов путь"};
         this.problemChoiceBox.getItems().addAll(problems);
         this.problemChoiceBox.setValue("Раскраска графа");

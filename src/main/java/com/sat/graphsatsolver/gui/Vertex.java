@@ -1,5 +1,6 @@
 package com.sat.graphsatsolver.gui;
 
+import com.sat.graphsatsolver.controllers.GraphController;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -17,8 +18,8 @@ public class Vertex extends StackPane {
     private final Circle circle;
     private final Label label;
 
-    private final static double CIRCLE_RADIUS = 30;
-    public final static double NODE_RADIUS = 32;
+    private final static double CIRCLE_RADIUS = GraphController.VERTEX_RADIUS;
+    public final static double NODE_RADIUS = CIRCLE_RADIUS + 2;
     private boolean selected;
     private int designation;
     private double centerX;
