@@ -15,7 +15,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 
-public class SatController implements Initializable {
+public class SatController {
 
     @FXML
     public AnchorPane mainAnchorpane;
@@ -44,8 +44,6 @@ public class SatController implements Initializable {
         var satInput = StringToList.fromStringAsList(cnfTextArea.getText());
 
         Runnable solve = () -> {
-            satProgressBar.setVisible(true);
-
             DPLL dpll = new DPLL();
             dpll.init(satInput);
 
@@ -59,8 +57,6 @@ public class SatController implements Initializable {
 
             satOutputTextArea.setEditable(true);
             cnfTextArea.setEditable(true);
-
-            satProgressBar.setVisible(false);
         };
         Thread thread = new Thread(solve);
         thread.start();
@@ -110,9 +106,4 @@ public class SatController implements Initializable {
         }
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        satProgressBar.setProgress(-1);
-        satProgressBar.setVisible(false);
-    }
 }

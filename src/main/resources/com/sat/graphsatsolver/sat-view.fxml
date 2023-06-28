@@ -4,14 +4,13 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.ProgressBar?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="mainAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="458.0" style="-fx-background-color: #E8EAF6;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
+<AnchorPane fx:id="mainAnchorpane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" prefWidth="458.0" style="-fx-background-color: #E8EAF6;" xmlns="http://javafx.com/javafx/20.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sat.graphsatsolver.controllers.SatController">
    <children>
       <MenuBar prefHeight="27.0" prefWidth="458.0">
         <menus>
@@ -29,16 +28,16 @@
           </Menu>
         </menus>
       </MenuBar>
-      <VBox layoutY="27.0" prefHeight="673.0" prefWidth="458.0" style="-fx-padding: 7;">
+      <VBox layoutX="-1.0" layoutY="27.0" prefHeight="576.0" prefWidth="458.0" style="-fx-padding: 18;">
          <children>
-            <ProgressBar fx:id="satProgressBar" focusTraversable="false" prefHeight="18.0" prefWidth="463.0" progress="0.0" />
-            <HBox prefHeight="663.0" prefWidth="490.0">
+            <Separator focusTraversable="false" prefWidth="200.0" visible="false" />
+            <HBox prefHeight="568.0" prefWidth="458.0">
                <children>
-                  <VBox prefHeight="659.0" prefWidth="343.0">
+                  <VBox prefHeight="545.0" prefWidth="339.0">
                      <children>
                         <Label alignment="CENTER" focusTraversable="false" prefHeight="20.0" prefWidth="381.0" style="-fx-background-color: whitesmoke; -fx-border-color: grey; -fx-border-radius: 3; -fx-border-radius: 3;" text="КНФ (DIMACS)" textAlignment="CENTER" />
                         <Separator focusTraversable="false" minHeight="3.0" prefHeight="3.0" prefWidth="200.0" visible="false" />
-                        <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="657.0" prefWidth="336.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
+                        <TextArea fx:id="cnfTextArea" focusTraversable="false" prefHeight="529.0" prefWidth="332.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
                      </children>
                   </VBox>
                   <Separator focusTraversable="false" minWidth="-Infinity" orientation="VERTICAL" prefHeight="200.0" prefWidth="3.0" visible="false" />
@@ -46,7 +45,7 @@
                      <children>
                         <Label alignment="CENTER" focusTraversable="false" prefHeight="20.0" prefWidth="146.0" style="-fx-background-color: whitesmoke; -fx-border-radius: 3; -fx-background-radius: 3; -fx-border-color: grey;" text="Результат" textAlignment="CENTER" />
                         <Separator focusTraversable="false" minHeight="3.0" prefHeight="3.0" prefWidth="200.0" visible="false" />
-                        <TextArea fx:id="satOutputTextArea" focusTraversable="false" prefHeight="650.0" prefWidth="139.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
+                        <TextArea fx:id="satOutputTextArea" focusTraversable="false" prefHeight="529.0" prefWidth="118.0" style="-fx-background-radius: 3; -fx-border-radius: 3;" />
                      </children>
                   </VBox>
                </children>

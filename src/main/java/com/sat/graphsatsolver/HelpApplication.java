@@ -16,7 +16,7 @@ public class HelpApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("help-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), HELP_WINDOW_WIDTH, HELP_WINDOW_HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Помощь");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("icons/app.png")).toString());
         stage.getIcons().add(image);

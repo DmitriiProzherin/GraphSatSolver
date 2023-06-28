@@ -15,7 +15,7 @@ public class GraphApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         FXMLLoader fxmlLoader = new FXMLLoader(GraphApplication.class.getResource("graph-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), Properties.GRAPH_WINDOW_WIDTH, Properties.GRAPH_WINDOW_HEIGHT);
+        Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Graph");
         Image image = new Image(Objects.requireNonNull(getClass().getResource("icons/app.png")).toString());
         stage.getIcons().add(image);

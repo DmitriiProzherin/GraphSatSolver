@@ -1,5 +1,6 @@
 package com.sat.graphsatsolver.utils;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -67,6 +68,9 @@ public class DIMACSConverter {
 
     public static String hamiltonianCyclePath(int[][] matrix){
         int vNum = matrix.length;
+        int variables = vNum * vNum;
+        int clauses = 0;
+
 
         StringBuilder res = new StringBuilder();
 
@@ -75,21 +79,25 @@ public class DIMACSConverter {
                 res.append(i * vNum + j +1).append(" ");
             }
             res.append("0\n");
+            clauses++;
 
             for (int j = 0; j < vNum; j++) {
                 res.append(j * vNum + i + 1).append(" ");
             }
             res.append("0\n");
+            clauses++;
 
             for (int j = 0; j < vNum - 1; j++) {
                 for (int k = j + 1; k < vNum; k++) {
                     res.append(-(i * vNum + j + 1)).append(" ").append(-(i * vNum + k + 1)).append(" 0\n");
+                    clauses++;
                 }
             }
 
             for (int j = 0; j < vNum; j++) {
                 for (int k = i; k < vNum - 1; k++) {
                     res.append(-(i*vNum + j+1)).append(" ").append(-((k+1) * vNum + j + 1)).append(" 0\n");
+                    clauses++;
                 }
             }
         }
@@ -101,19 +109,19 @@ public class DIMACSConverter {
                         int n1 = i * vNum + k;
                         int n2 = j * vNum + k + 1;
                         res.append(-n1).append(" ").append(-n2).append(" 0\n");
-                        // System.out.println(n1 + " " + n2);
-
+                        clauses++;
                         int k1 = j * vNum + k;
                         int k2 = i * vNum + k + 1;
                         res.append(-k1).append(" ").append(-k2).append(" 0\n");
-                        // System.out.println(k1 + " " + k2);
+                        clauses++;
                     }
                 }
             }
         }
         res.delete(res.length() - 1, res.length());
 
-        return res.toString();
+
+        return "p cnf " + variables + " " + clauses + "\n" + res;
     }
 
 }
