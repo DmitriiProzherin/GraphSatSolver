@@ -27,7 +27,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.sat.graphsatsolver.utils.ColorScheme.*;
-import static com.sat.graphsatsolver.utils.Properties.CONTENT_BOX_HEIGHT;
+import static com.sat.graphsatsolver.utils.Properties.*;
 
 public class GraphController implements Initializable {
 
@@ -487,6 +487,8 @@ public class GraphController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contentBox.setPrefHeight(CONTENT_BOX_HEIGHT);
+        drawingPane.setPrefWidth(DRAWING_PANE_WIDTH);
+        drawingPane.setPrefHeight(DRAWING_PANE_HEIGHT);
 
         VERTEX_RADIUS = contentBox.getPrefHeight() * 0.04;
 

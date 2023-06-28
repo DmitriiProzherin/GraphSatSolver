@@ -17,4 +17,7 @@ public class Properties {
 
     // Элементы интерфейса графа
     public static final double CONTENT_BOX_HEIGHT = GRAPH_WINDOW_HEIGHT * 0.9642857;
+
+    public static final double DRAWING_PANE_WIDTH = GRAPH_WINDOW_WIDTH * 0.507;
+    public static final double DRAWING_PANE_HEIGHT = CONTENT_BOX_HEIGHT * 0.94;
 }

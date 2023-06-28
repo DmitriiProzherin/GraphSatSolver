@@ -11,6 +11,7 @@ import javafx.scene.shape.Line;
 import java.util.ArrayList;
 
 import static com.sat.graphsatsolver.utils.ColorScheme.*;
+import static com.sat.graphsatsolver.utils.Properties.*;
 import static com.sat.graphsatsolver.utils.Style.*;
 
 public class Vertex extends StackPane {
@@ -132,19 +133,20 @@ public class Vertex extends StackPane {
 
             this.setOnMouseDragged(event -> {
 
-                double x = event.getSceneX() - 183 - mouseAnchorX;
-                double y = event.getSceneY() - 47 - mouseAnchorY;
+                double x = event.getSceneX() - GRAPH_WINDOW_WIDTH * 0.183 - mouseAnchorX;
+                double y = event.getSceneY() - GRAPH_WINDOW_HEIGHT * 0.067 - mouseAnchorY;
 
                 double posX;
                 double posY;
 
+                double maxW = DRAWING_PANE_WIDTH - 2*NODE_RADIUS + 1;
+                double maxH = DRAWING_PANE_HEIGHT - 2*NODE_RADIUS + 1;
+
                 if (x < 1) posX = 1;
-                else if (x > 444) posX = 444;
-                else posX = x;
+                else posX = Math.min(x, maxW);
 
                 if (y < 1) posY = 1;
-                else if (y > 572) posY = 572;
-                else posY = y;
+                else posY = Math.min(y, maxH);
 
                 this.setLayoutX(posX);
                 this.setLayoutY(posY);
