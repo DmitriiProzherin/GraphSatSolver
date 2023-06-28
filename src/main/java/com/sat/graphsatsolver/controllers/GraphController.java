@@ -488,7 +488,7 @@ public class GraphController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contentBox.setPrefHeight(CONTENT_BOX_HEIGHT);
 
-        VERTEX_RADIUS = contentBox.getPrefHeight() * 0.042;
+        VERTEX_RADIUS = contentBox.getPrefHeight() * 0.04;
 
         String[] problems = {"Раскраска графа", "Гамильтонов путь"};
         this.problemChoiceBox.getItems().addAll(problems);
