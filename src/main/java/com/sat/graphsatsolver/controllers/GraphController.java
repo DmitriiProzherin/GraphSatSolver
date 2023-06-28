@@ -9,6 +9,7 @@ import com.sat.graphsatsolver.utils.*;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -487,6 +488,8 @@ public class GraphController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         contentBox.setPrefHeight(CONTENT_BOX_HEIGHT);
+        contentBox.setPadding(new Insets(contentBox.getPrefHeight() * 0.03));
+
         drawingPane.setPrefWidth(DRAWING_PANE_WIDTH);
         drawingPane.setPrefHeight(DRAWING_PANE_HEIGHT);
 

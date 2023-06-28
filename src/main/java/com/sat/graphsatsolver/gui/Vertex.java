@@ -20,7 +20,7 @@ public class Vertex extends StackPane {
     private final Label label;
 
     private final static double CIRCLE_RADIUS = GraphController.VERTEX_RADIUS;
-    public final static double NODE_RADIUS = CIRCLE_RADIUS + 2;
+    public final static double NODE_RADIUS = CIRCLE_RADIUS + CIRCLE_RADIUS * 0.06666;
     private boolean selected;
     private int designation;
     private double centerX;
